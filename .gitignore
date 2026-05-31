@@ -4,5 +4,7 @@ build/
 runs/
 run/
 out/
+.eclipse/
+bin/
 
 !gradle/wrapper/gradle-wrapper.jar
