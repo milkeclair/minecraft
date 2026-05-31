@@ -1,0 +1,33 @@
+modLoader = "kotlinforforge"
+loaderVersion = "[6.2.0,)"
+license = "MIT"
+
+[[mods]]
+modId = "glacage"
+version = "0.1.0"
+displayName = "Glacage"
+authors = "milkeclair"
+description = '''
+A small NeoForge mod written in Kotlin.
+'''
+
+[[dependencies.glacage]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.11,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.glacage]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.11]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.glacage]]
+modId = "kotlinforforge"
+type = "required"
+versionRange = "[6.2.0,)"
+ordering = "AFTER"
+side = "BOTH"
