@@ -262,7 +262,7 @@ exit /b 0
   echo.
 exit /b
 
-: bool->void
+:: bool->void
 :hp_set_dns_record_exist
   set IS_DNS_RECORD_EXIST=%1
 exit /b
