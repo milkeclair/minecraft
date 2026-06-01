@@ -46,12 +46,12 @@ public class Collection {
 
       for (var direction : Direction.values()) {
         var neighbor = current.relative(direction).immutable();
-        enqueue(neighbor, direction);
+        enqueue(neighbor);
       }
     }
   }
 
-  private void enqueue(BlockPos pos, Direction direction) {
+  private void enqueue(BlockPos pos) {
     if (collected.contains(pos) || !Lumberjack.isInsideSearchArea(brokeLogPos, pos)) {
       return;
     }

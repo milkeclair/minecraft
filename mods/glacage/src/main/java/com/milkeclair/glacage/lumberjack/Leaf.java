@@ -25,12 +25,12 @@ public class Leaf {
 
   public static boolean isTooFarFromLog(BlockState blockState, int distanceFromLog) {
     if (!isLeaf(blockState)) {
-      return false;
+      return true;
     }
 
     var leafDistance = blockState.getValue(LeavesBlock.DISTANCE);
     if (leafDistance >= LeavesBlock.DECAY_DISTANCE) {
-      return false;
+      return true;
     }
 
     // leafDistanceはminecraft側が判定する距離
