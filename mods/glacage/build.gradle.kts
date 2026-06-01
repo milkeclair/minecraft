@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
   `java-library`
-  kotlin("jvm") version "2.3.10"
   id("net.neoforged.moddev") version "2.0.141"
   id("com.milkeclair.minecraft-windows-client")
   id("com.diffplug.spotless") version "8.5.1"
@@ -12,7 +9,6 @@ val modId = providers.gradleProperty("mod_id").get()
 val modGroupId = providers.gradleProperty("mod_group_id").get()
 val modVersion = providers.gradleProperty("mod_version").get()
 val neoForgeVersion = providers.gradleProperty("neoforge_version").get()
-val kotlinForForgeVersion = providers.gradleProperty("kotlin_for_forge_version").get()
 val clientRunDirectory = layout.projectDirectory.dir("runs/client").asFile
 val serverRunDirectory = layout.projectDirectory.dir("runs/server").asFile
 
@@ -25,21 +21,11 @@ base {
 
 repositories {
   mavenCentral()
-  maven {
-    name = "Kotlin for Forge"
-    url = uri("https://thedarkcolour.github.io/KotlinForForge/")
-  }
 }
 
 java {
   sourceCompatibility = JavaVersion.VERSION_21
   targetCompatibility = JavaVersion.VERSION_21
-}
-
-kotlin {
-  compilerOptions {
-    jvmTarget.set(JvmTarget.JVM_21)
-  }
 }
 
 neoForge {
@@ -66,20 +52,11 @@ neoForge {
   }
 }
 
-dependencies {
-  implementation("thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion")
-}
-
 spotless {
-  kotlin {
-    target("src/**/*.kt")
-    ktlint().editorConfigOverride(
-      mapOf(
-        "indent_size" to "2",
-        "continuation_indent_size" to "2",
-        "ktlint_code_style" to "intellij_idea",
-      ),
-    )
+  java {
+    target("src/**/*.java")
+    googleJavaFormat()
+    removeUnusedImports()
     trimTrailingWhitespace()
     endWithNewline()
   }
@@ -98,7 +75,7 @@ spotless {
   }
 
   format("resources") {
-    target("src/main/resources/**/*.toml", "gradle.properties")
+    target("src/main/resources/**/*.json", "src/main/resources/**/*.toml", "gradle.properties")
     trimTrailingWhitespace()
     endWithNewline()
   }

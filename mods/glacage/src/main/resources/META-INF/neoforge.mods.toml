@@ -1,5 +1,5 @@
-modLoader = "kotlinforforge"
-loaderVersion = "[6.2.0,)"
+modLoader = "javafml"
+loaderVersion = "[1,)"
 license = "MIT"
 
 [[mods]]
@@ -8,7 +8,7 @@ version = "0.1.0"
 displayName = "Glacage"
 authors = "milkeclair"
 description = '''
-A small NeoForge mod written in Kotlin.
+A small NeoForge mod written in Java.
 '''
 
 [[dependencies.glacage]]
@@ -23,11 +23,4 @@ modId = "minecraft"
 type = "required"
 versionRange = "[1.21.11]"
 ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.glacage]]
-modId = "kotlinforforge"
-type = "required"
-versionRange = "[6.2.0,)"
-ordering = "AFTER"
 side = "BOTH"

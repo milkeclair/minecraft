@@ -27,16 +27,12 @@ public abstract class InstallWindowsMinecraftModsTask extends DefaultTask {
   @InputFile
   public abstract RegularFileProperty getModJar();
 
-  @InputFile
-  public abstract RegularFileProperty getRuntimeMod();
-
   @TaskAction
   public void install() throws Exception {
     var destination = Path.of(toWslPath(windowsRoamingAppData() + "\\.minecraft\\mods"));
     Files.createDirectories(destination);
 
     copyTo(destination, getModJar().get().getAsFile().toPath());
-    copyTo(destination, getRuntimeMod().get().getAsFile().toPath());
   }
 
   private void copyTo(Path destination, Path source) throws Exception {

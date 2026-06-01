@@ -12,18 +12,6 @@ public class WindowsMinecraftClientPlugin implements Plugin<Project> {
             .getExtensions()
             .create("windowsMinecraftClient", WindowsMinecraftClientExtension.class);
 
-    extension
-        .getRuntimeModUrl()
-        .convention(project.getProviders().gradleProperty("kotlin_for_forge_runtime_mod_url"));
-    extension
-        .getRuntimeModFileName()
-        .convention(
-            project
-                .getProviders()
-                .gradleProperty("kotlin_for_forge_version")
-                .map(version -> "kotlinforforge-" + version + "-all.jar")
-                .orElse("kotlinforforge-runtime.jar"));
-
     project
         .getPluginManager()
         .withPlugin(
@@ -34,23 +22,6 @@ public class WindowsMinecraftClientPlugin implements Plugin<Project> {
                     .convention(
                         project.getTasks().named("jar", Jar.class).flatMap(Jar::getArchiveFile)));
 
-    var runtimeMod =
-        project
-            .getLayout()
-            .getBuildDirectory()
-            .file(extension.getRuntimeModFileName().map(fileName -> "runtime-mods/" + fileName));
-
-    var downloadRuntimeMod =
-        project
-            .getTasks()
-            .register(
-                "downloadKotlinForForgeRuntimeMod",
-                DownloadFileTask.class,
-                task -> {
-                  task.getSourceUrl().set(extension.getRuntimeModUrl());
-                  task.getOutputFile().set(runtimeMod);
-                });
-
     var copyToWindowsMods =
         project
             .getTasks()
@@ -58,10 +29,8 @@ public class WindowsMinecraftClientPlugin implements Plugin<Project> {
                 "copyToWindowsMinecraftMods",
                 InstallWindowsMinecraftModsTask.class,
                 task -> {
-                  task.dependsOn("jar", downloadRuntimeMod);
+                  task.dependsOn("jar");
                   task.getModJar().set(extension.getModJar());
-                  task.getRuntimeMod()
-                      .set(downloadRuntimeMod.flatMap(DownloadFileTask::getOutputFile));
                 });
 
     var launchWindowsLauncher =
