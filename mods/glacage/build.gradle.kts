@@ -52,6 +52,20 @@ neoForge {
   }
 }
 
+dependencies {
+  testImplementation(platform("org.junit:junit-bom:6.0.1"))
+  testImplementation("org.junit.jupiter:junit-jupiter")
+  testImplementation("org.assertj:assertj-core:3.27.6")
+  testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+sourceSets {
+  test {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+  }
+}
+
 spotless {
   java {
     target("src/**/*.java")
@@ -79,6 +93,10 @@ spotless {
     trimTrailingWhitespace()
     endWithNewline()
   }
+}
+
+tasks.named<Test>("test") {
+  useJUnitPlatform()
 }
 
 tasks.register("verifyAll") {

@@ -7,8 +7,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
 public class Lumberjack {
-  private static final int MAX_TREE_HEIGHT = 64;
-  private static final int MAX_HORIZONTAL_RADIUS = 8;
+  public static final int MAX_TREE_HEIGHT = 64;
+  public static final int MAX_HORIZONTAL_RADIUS = 8;
 
   private boolean isBreakingTree = false;
 
