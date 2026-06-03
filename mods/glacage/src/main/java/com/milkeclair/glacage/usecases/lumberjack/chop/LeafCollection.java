@@ -30,14 +30,15 @@ public class LeafCollection {
 
   /** 葉を探索する。 原木の位置からBFSで探索していき、収集した葉を返す。 */
   public LinkedHashSet<BlockPos> call() {
-    var nodes = new BreadthFirst<>(
-        starts(),
-        this::isInsideSearchArea,
-        this::isCollectableLeaf,
-        this::neighbors,
-        MAX_LEAF_BLOCKS,
-        OverflowPolicy.ELLIPSIS)
-        .collect();
+    var nodes =
+        new BreadthFirst<>(
+                starts(),
+                this::isInsideSearchArea,
+                this::isCollectableLeaf,
+                this::neighbors,
+                MAX_LEAF_BLOCKS,
+                OverflowPolicy.ELLIPSIS)
+            .collect();
 
     return positions(nodes);
   }

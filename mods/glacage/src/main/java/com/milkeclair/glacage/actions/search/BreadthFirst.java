@@ -45,18 +45,12 @@ public class BreadthFirst<T> {
     return search(node -> false).nodes();
   }
 
-  /**
-   * 経路の取得。
-   * valueがtargetと一致するノードのルートを探す。
-   */
+  /** 経路の取得。 valueがtargetと一致するノードのルートを探す。 */
   public Optional<List<T>> routeTo(T target) {
     return routeTo(node -> Objects.equals(node.value(), target));
   }
 
-  /**
-   * 経路の取得。
-   * isTargetなノードのルートを探す。
-   */
+  /** 経路の取得。 isTargetなノードのルートを探す。 */
   public Optional<List<T>> routeTo(Predicate<Node<T>> isTarget) {
     return search(isTarget).route();
   }
@@ -110,6 +104,5 @@ public class BreadthFirst<T> {
     return collected;
   }
 
-  private record Result<T>(LinkedHashSet<Node<T>> nodes, Optional<List<T>> route) {
-  }
+  private record Result<T>(LinkedHashSet<Node<T>> nodes, Optional<List<T>> route) {}
 }
