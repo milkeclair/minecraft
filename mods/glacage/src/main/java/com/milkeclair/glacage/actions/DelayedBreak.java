@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
-/** tickごとに木を壊す演出。 */
+/** tickごとにブロックを壊す演出。 */
 public class DelayedBreak {
   private final ServerPlayer player;
   private final ServerLevel level;

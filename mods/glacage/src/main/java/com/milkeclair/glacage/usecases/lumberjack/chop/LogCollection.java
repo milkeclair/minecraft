@@ -1,9 +1,14 @@
 package com.milkeclair.glacage.usecases.lumberjack.chop;
 
+import com.milkeclair.glacage.actions.search.BreadthFirst;
+import com.milkeclair.glacage.actions.search.breadthFirst.Node;
+import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
 import com.milkeclair.glacage.models.Log;
 import com.milkeclair.glacage.usecases.Lumberjack;
-import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -17,9 +22,6 @@ public class LogCollection {
   private final ServerLevel level;
   private final Block baseBlock;
 
-  private final LinkedHashSet<BlockPos> collected = new LinkedHashSet<>();
-  private final ArrayDeque<BlockPos> queue = new ArrayDeque<>();
-
   public LogCollection(ServerLevel level, BlockPos brokeLogPos, Block baseBlock) {
     this.brokeLogPos = brokeLogPos;
     this.level = level;
@@ -28,43 +30,44 @@ public class LogCollection {
 
   /** 原木を探索する。 破壊されたブロックの位置からBFSで探索していき、収集した原木を返す。 */
   public LinkedHashSet<BlockPos> call() {
-    recursiveCollectLogs();
+    var nodes =
+        new BreadthFirst<>(
+                List.of(new Node<>(brokeLogPos)),
+                this::isInsideSearchArea,
+                this::isCollectableLog,
+                this::neighbors,
+                MAX_LOG_BLOCKS,
+                OverflowPolicy.EMPTY)
+            .collect();
 
-    if (collected.size() > MAX_LOG_BLOCKS) {
-      return new LinkedHashSet<>();
-    } else {
-      return collected;
-    }
+    return positions(nodes);
   }
 
-  private void recursiveCollectLogs() {
-    collected.add(brokeLogPos);
-    queue.add(brokeLogPos);
+  private ArrayList<BlockPos> neighbors(Node<BlockPos> node) {
+    var nodes = new ArrayList<BlockPos>();
 
-    while (isExplorable()) {
-      var current = queue.removeFirst();
-
-      for (var direction : Direction.values()) {
-        var neighbor = current.relative(direction).immutable();
-        enqueue(neighbor);
-      }
+    for (var direction : Direction.values()) {
+      nodes.add(node.value().relative(direction).immutable());
     }
+
+    return nodes;
   }
 
-  private void enqueue(BlockPos pos) {
-    if (collected.contains(pos) || !Lumberjack.isInsideSearchArea(brokeLogPos, pos)) {
-      return;
-    }
-
-    if (!new Log(level.getBlockState(pos)).matches(baseBlock)) {
-      return;
-    }
-
-    collected.add(pos);
-    queue.add(pos);
+  private boolean isInsideSearchArea(Node<BlockPos> node) {
+    return Lumberjack.isInsideSearchArea(brokeLogPos, node.value());
   }
 
-  private boolean isExplorable() {
-    return !queue.isEmpty() && collected.size() <= MAX_LOG_BLOCKS;
+  private boolean isCollectableLog(Node<BlockPos> node) {
+    return new Log(level.getBlockState(node.value())).matches(baseBlock);
+  }
+
+  private LinkedHashSet<BlockPos> positions(Collection<Node<BlockPos>> nodes) {
+    var positions = new LinkedHashSet<BlockPos>();
+
+    for (var node : nodes) {
+      positions.add(node.value());
+    }
+
+    return positions;
   }
 }

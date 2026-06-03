@@ -1,10 +1,14 @@
 package com.milkeclair.glacage.usecases.lumberjack.chop;
 
+import com.milkeclair.glacage.actions.search.BreadthFirst;
+import com.milkeclair.glacage.actions.search.breadthFirst.Node;
+import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
 import com.milkeclair.glacage.models.Leaf;
 import com.milkeclair.glacage.usecases.Lumberjack;
-import java.util.ArrayDeque;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,10 +22,6 @@ public class LeafCollection {
   private final Set<BlockPos> logs;
   private final ServerLevel level;
 
-  private final LinkedHashSet<BlockPos> collected = new LinkedHashSet<>();
-  private final HashSet<BlockPos> visited = new HashSet<>();
-  private final ArrayDeque<Node> queue = new ArrayDeque<>();
-
   public LeafCollection(ServerLevel level, BlockPos brokeLogPos, Set<BlockPos> logs) {
     this.brokeLogPos = brokeLogPos;
     this.logs = logs;
@@ -30,60 +30,59 @@ public class LeafCollection {
 
   /** 葉を探索する。 原木の位置からBFSで探索していき、収集した葉を返す。 */
   public LinkedHashSet<BlockPos> call() {
-    enqueueAroundLog();
-    recursiveCollectLeaves();
+    var nodes = new BreadthFirst<>(
+        starts(),
+        this::isInsideSearchArea,
+        this::isCollectableLeaf,
+        this::neighbors,
+        MAX_LEAF_BLOCKS,
+        OverflowPolicy.ELLIPSIS)
+        .collect();
 
-    return collected;
+    return positions(nodes);
   }
 
-  private void enqueueAroundLog() {
+  private ArrayList<Node<BlockPos>> starts() {
+    var nodes = new ArrayList<Node<BlockPos>>();
     var distanceFromLog = 1;
 
     for (var log : logs) {
       for (var direction : Direction.values()) {
         var neighbor = log.relative(direction).immutable();
-
-        enqueue(neighbor, distanceFromLog);
+        nodes.add(new Node<>(neighbor, distanceFromLog, List.of(log, neighbor)));
       }
     }
+
+    return nodes;
   }
 
-  private void recursiveCollectLeaves() {
-    while (isExplorable()) {
-      var current = queue.removeFirst();
-      collected.add(current.pos());
+  private ArrayList<BlockPos> neighbors(Node<BlockPos> node) {
+    var nodes = new ArrayList<BlockPos>();
 
-      for (var direction : Direction.values()) {
-        var neighbor = current.pos().relative(direction).immutable();
-        var distanceFromLog = current.distanceFromLog() + 1;
-
-        enqueue(neighbor, distanceFromLog);
-      }
-    }
-  }
-
-  private void enqueue(BlockPos pos, int distanceFromLog) {
-    if (visited.contains(pos) || !Lumberjack.isInsideSearchArea(brokeLogPos, pos)) {
-      return;
+    for (var direction : Direction.values()) {
+      nodes.add(node.value().relative(direction).immutable());
     }
 
-    if (!isCollectableLeaf(pos, distanceFromLog)) {
-      return;
+    return nodes;
+  }
+
+  private boolean isInsideSearchArea(Node<BlockPos> node) {
+    return Lumberjack.isInsideSearchArea(brokeLogPos, node.value());
+  }
+
+  private boolean isCollectableLeaf(Node<BlockPos> node) {
+    var leaf = new Leaf(level.getBlockState(node.value()));
+
+    return leaf.isNatural() && !leaf.isTooFarFromLog(node.distance());
+  }
+
+  private LinkedHashSet<BlockPos> positions(Collection<Node<BlockPos>> nodes) {
+    var positions = new LinkedHashSet<BlockPos>();
+
+    for (var node : nodes) {
+      positions.add(node.value());
     }
 
-    visited.add(pos);
-    queue.add(new Node(pos, distanceFromLog));
+    return positions;
   }
-
-  private boolean isExplorable() {
-    return !queue.isEmpty() && collected.size() < MAX_LEAF_BLOCKS;
-  }
-
-  private boolean isCollectableLeaf(BlockPos pos, int distanceFromLog) {
-    var leaf = new Leaf(level.getBlockState(pos));
-
-    return leaf.isNatural() && !leaf.isTooFarFromLog(distanceFromLog);
-  }
-
-  private record Node(BlockPos pos, int distanceFromLog) {}
 }
