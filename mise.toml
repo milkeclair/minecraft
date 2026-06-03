@@ -1,0 +1,11 @@
+[tasks.apply]
+dir = "{{cwd}}"
+run = "./gradlew spotlessApply"
+
+[tasks.verify]
+dir = "{{cwd}}"
+run = "./gradlew verifyAll"
+
+[tasks.manual]
+dir = "{{cwd}}"
+run = "./gradlew runWindowsClient"

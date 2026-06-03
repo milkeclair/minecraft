@@ -1,0 +1,38 @@
+package com.milkeclair.glacage.helpers;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
+
+public class FakePlayer {
+  private final ServerPlayer serverPlayer = mock(ServerPlayer.class);
+  private final ServerPlayerGameMode gameMode = mock(ServerPlayerGameMode.class);
+
+  public FakePlayer() {
+    try {
+      Field field = ServerPlayer.class.getField("gameMode");
+      field.setAccessible(true);
+      field.set(serverPlayer, gameMode);
+    } catch (ReflectiveOperationException exception) {
+      throw new IllegalStateException(exception);
+    }
+  }
+
+  public ServerPlayer serverPlayer() {
+    return serverPlayer;
+  }
+
+  public ServerPlayerGameMode gameMode() {
+    return gameMode;
+  }
+
+  public FakePlayer setLevel(ServerLevel level) {
+    when(serverPlayer.level()).thenReturn(level);
+
+    return this;
+  }
+}

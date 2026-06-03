@@ -1,37 +1,37 @@
-package com.milkeclair.glacage.lumberjack.log;
+package com.milkeclair.glacage.usecases.lumberjack.chop;
 
-import com.milkeclair.glacage.Lumberjack;
-import com.milkeclair.glacage.lumberjack.Log;
+import com.milkeclair.glacage.models.Log;
+import com.milkeclair.glacage.usecases.Lumberjack;
 import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 
-public class Collection {
+/** 原木を探索するクラス。 */
+public class LogCollection {
   private static final int MAX_LOG_BLOCKS = 128;
 
-  private final ServerLevel level;
   private final BlockPos brokeLogPos;
+  private final ServerLevel level;
   private final Block baseBlock;
 
   private final LinkedHashSet<BlockPos> collected = new LinkedHashSet<>();
   private final ArrayDeque<BlockPos> queue = new ArrayDeque<>();
 
-  public Collection(ServerLevel level, BlockPos brokeLogPos, Block baseBlock) {
-    this.level = level;
+  public LogCollection(ServerLevel level, BlockPos brokeLogPos, Block baseBlock) {
     this.brokeLogPos = brokeLogPos;
+    this.level = level;
     this.baseBlock = baseBlock;
   }
 
-  public Set<BlockPos> call() {
+  /** 原木を探索する。 破壊されたブロックの位置からBFSで探索していき、収集した原木を返す。 */
+  public LinkedHashSet<BlockPos> call() {
     recursiveCollectLogs();
 
     if (collected.size() > MAX_LOG_BLOCKS) {
-      return Collections.emptySet();
+      return new LinkedHashSet<>();
     } else {
       return collected;
     }
@@ -56,8 +56,7 @@ public class Collection {
       return;
     }
 
-    var state = level.getBlockState(pos);
-    if (!Log.isMatchingLog(state, baseBlock)) {
+    if (!new Log(level.getBlockState(pos)).matches(baseBlock)) {
       return;
     }
 

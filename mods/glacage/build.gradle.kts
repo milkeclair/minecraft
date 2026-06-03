@@ -50,12 +50,19 @@ neoForge {
       sourceSet(sourceSets.main.get())
     }
   }
+
+  unitTest {
+    enable()
+    testedMod.set(mods.named(modId))
+  }
 }
 
 dependencies {
   testImplementation(platform("org.junit:junit-bom:6.0.1"))
   testImplementation("org.junit.jupiter:junit-jupiter")
   testImplementation("org.assertj:assertj-core:3.27.6")
+  testImplementation("org.mockito:mockito-core:5.21.0")
+  testImplementation("net.neoforged:testframework:$neoForgeVersion")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -104,9 +111,12 @@ tasks.register("verifyAll") {
   description = "Runs formatting checks and builds both Gradle build logic and this mod."
 
   dependsOn(
+    gradle.includedBuild("gradlePlugins").task(":spotlessApply"),
     gradle.includedBuild("gradlePlugins").task(":spotlessCheck"),
     gradle.includedBuild("gradlePlugins").task(":build"),
+    tasks.named("spotlessApply"),
     tasks.named("spotlessCheck"),
     tasks.named("build"),
+    tasks.named("test"),
   )
 }
