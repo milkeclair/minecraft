@@ -31,8 +31,9 @@ class DelayedBreakTest {
         var third = new BlockPos(0, 2, 0);
         var level = mock(ServerLevel.class);
         var player = new FakePlayer();
-        var delayedBreak = new DelayedBreak(
-            player.serverPlayer(), level, new LinkedHashSet<>(List.of(first, second, third)));
+        var delayedBreak =
+            new DelayedBreak(
+                player.serverPlayer(), level, new LinkedHashSet<>(List.of(first, second, third)));
         when(level.isEmptyBlock(first)).thenReturn(true);
         when(level.isEmptyBlock(second)).thenReturn(false);
 
@@ -72,7 +73,8 @@ class DelayedBreakTest {
         var block = new BlockPos(0, 0, 0);
         var level = mock(ServerLevel.class);
         var player = new FakePlayer();
-        var delayedBreak = new DelayedBreak(player.serverPlayer(), level, new LinkedHashSet<>(List.of(block)));
+        var delayedBreak =
+            new DelayedBreak(player.serverPlayer(), level, new LinkedHashSet<>(List.of(block)));
 
         assertThat(delayedBreak.isFinished()).isFalse();
       }
