@@ -18,6 +18,11 @@ public class DelayedBreak {
     this.blocks = new Queue(blocks);
   }
 
+  /* プレイヤーの取得。 */
+  public ServerPlayer player() {
+    return player;
+  }
+
   /** 各tickの処理。 */
   public void tick() {
     for (var pos : blocks.nextBatch()) {

@@ -28,6 +28,20 @@ class NodeTest {
     }
 
     @Nested
+    @DisplayName("値と距離を渡した場合")
+    class ValueAndDistance {
+      @Test
+      @DisplayName("指定した距離と開始経路を持つノードを作る")
+      void createsNodeWithDistance() {
+        var node = new Node<>("A", 3);
+
+        assertThat(node.value()).isEqualTo("A");
+        assertThat(node.distance()).isEqualTo(3);
+        assertThat(node.path()).containsExactly("A");
+      }
+    }
+
+    @Nested
     @DisplayName("経路を渡した場合")
     class GivenPath {
       @Test

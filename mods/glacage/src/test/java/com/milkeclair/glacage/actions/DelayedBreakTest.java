@@ -18,6 +18,24 @@ import org.junit.jupiter.api.Test;
 @DisplayName("DelayedBreak")
 class DelayedBreakTest {
   @Nested
+  @DisplayName("#player")
+  class Player {
+    @Nested
+    @DisplayName("呼び出した場合")
+    class Called {
+      @Test
+      @DisplayName("プレイヤーを返す")
+      void returnPlayer() {
+        var player = new FakePlayer();
+        var level = mock(ServerLevel.class);
+        var delayedBreak = new DelayedBreak(player.serverPlayer(), level, new LinkedHashSet<>());
+
+        assertThat(delayedBreak.player()).isEqualTo(player.serverPlayer());
+      }
+    }
+  }
+
+  @Nested
   @DisplayName("#tick")
   class Tick {
     @Nested

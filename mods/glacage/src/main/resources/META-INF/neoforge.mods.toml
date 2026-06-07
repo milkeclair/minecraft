@@ -7,8 +7,9 @@ modId = "glacage"
 version = "0.1.0"
 displayName = "Glacage"
 authors = "milkeclair"
+displayTest = "MATCH_VERSION"
 description = '''
-A small NeoForge mod written in Java.
+Gonna make Minecraft look tasty!
 '''
 
 [[dependencies.glacage]]

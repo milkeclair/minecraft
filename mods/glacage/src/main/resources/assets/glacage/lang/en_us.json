@@ -1,0 +1,9 @@
+{
+  "glacage.configuration.title": "Configuration",
+  "glacage.configuration.section.glacage.client.toml": "Client Settings",
+  "glacage.configuration.section.glacage.client.toml.title": "Glacage Configuration",
+  "glacage.configuration.features": "Features",
+  "glacage.configuration.features.button": "Edit",
+  "glacage.configuration.features.lumberjack": "Lumberjack",
+  "glacage.configuration.features.lumberjack.tooltip": "Do you have three axes?"
+}

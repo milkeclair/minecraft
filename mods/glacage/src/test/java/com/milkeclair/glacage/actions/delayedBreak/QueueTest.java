@@ -73,6 +73,19 @@ class QueueTest {
   @DisplayName("#isEmpty")
   class IsEmpty {
     @Nested
+    @DisplayName("ブロックが残っている場合")
+    class RemainingBlocks {
+      @Test
+      @DisplayName("falseを返す")
+      void returnsFalse() {
+        var block = new BlockPos(0, 0, 0);
+        var queue = new Queue(new LinkedHashSet<>(List.of(block)));
+
+        assertThat(queue.isEmpty()).isFalse();
+      }
+    }
+
+    @Nested
     @DisplayName("すべてのブロックを取り出した場合")
     class AfterAllBlocksPolled {
       @Test

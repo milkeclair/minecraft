@@ -1,0 +1,9 @@
+{
+  "glacage.configuration.title": "設定",
+  "glacage.configuration.section.glacage.client.toml": "クライアント設定",
+  "glacage.configuration.section.glacage.client.toml.title": "Glacageの設定",
+  "glacage.configuration.features": "機能",
+  "glacage.configuration.features.button": "編集",
+  "glacage.configuration.features.lumberjack": "木こり",
+  "glacage.configuration.features.lumberjack.tooltip": "斧を3本持っていますか?"
+}

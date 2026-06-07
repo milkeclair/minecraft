@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.util.UUID;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
@@ -32,6 +33,12 @@ public class FakePlayer {
 
   public FakePlayer setLevel(ServerLevel level) {
     when(serverPlayer.level()).thenReturn(level);
+
+    return this;
+  }
+
+  public FakePlayer setUuid(UUID uuid) {
+    when(serverPlayer.getUUID()).thenReturn(uuid);
 
     return this;
   }

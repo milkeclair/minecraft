@@ -1,6 +1,8 @@
 package com.milkeclair.glacage.usecases;
 
 import com.milkeclair.glacage.actions.DelayedBreak;
+import com.milkeclair.glacage.config.Feature;
+import com.milkeclair.glacage.config.Features;
 import com.milkeclair.glacage.usecases.lumberjack.Chop;
 import java.util.ArrayDeque;
 import net.minecraft.core.BlockPos;
@@ -35,6 +37,10 @@ public class Lumberjack {
   /** 木をこるアクション。 */
   @SubscribeEvent(priority = EventPriority.LOWEST)
   public void chop(BlockEvent.BreakEvent event) {
+    if (!Features.enabled(Feature.LUMBERJACK, event.getPlayer())) {
+      return;
+    }
+
     if (isBreakingTree) {
       return;
     }
@@ -47,8 +53,14 @@ public class Lumberjack {
     }
   }
 
+  /* キューの処理。 */
   @SubscribeEvent
   public void breakQueuedBlocks(ServerTickEvent.Post event) {
+    if (!Features.enabled(Feature.LUMBERJACK)) {
+      delayedTreeBreaks.clear();
+      return;
+    }
+
     if (isBreakingTree || delayedTreeBreaks.isEmpty()) {
       return;
     }
@@ -56,6 +68,11 @@ public class Lumberjack {
     isBreakingTree = true;
     try {
       var current = delayedTreeBreaks.peek();
+      if (!Features.enabled(Feature.LUMBERJACK, current.player())) {
+        delayedTreeBreaks.removeFirst();
+        return;
+      }
+
       current.tick();
       if (current.isFinished()) {
         delayedTreeBreaks.removeFirst();
