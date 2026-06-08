@@ -8,6 +8,7 @@ import java.util.UUID;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.world.item.ItemStack;
 
 public class FakePlayer {
   private final ServerPlayer serverPlayer = mock(ServerPlayer.class);
@@ -33,6 +34,12 @@ public class FakePlayer {
 
   public FakePlayer setLevel(ServerLevel level) {
     when(serverPlayer.level()).thenReturn(level);
+
+    return this;
+  }
+
+  public FakePlayer setMainHandItem(ItemStack itemStack) {
+    when(serverPlayer.getMainHandItem()).thenReturn(itemStack);
 
     return this;
   }

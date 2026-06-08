@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
 /** 木こり機能。 */
@@ -26,6 +27,10 @@ public class Chop {
       return Optional.empty();
     }
 
+    if (!isHoldingAxe(player)) {
+      return Optional.empty();
+    }
+
     if (!new Log(event.getState()).isLog()) {
       return Optional.empty();
     }
@@ -39,18 +44,32 @@ public class Chop {
       return Optional.empty();
     }
 
-    return Optional.of(new DelayedBreak(player, level, breakOrder(brokeLogPos, logs, leaves)));
+    var breakableLogs = breakableLogs(brokeLogPos, logs);
+    return Optional.of(
+        new DelayedBreak(player, level, breakOrder(breakableLogs, leaves), breakableLogs));
   }
 
-  private LinkedHashSet<BlockPos> breakOrder(
-      BlockPos brokeLogPos, LinkedHashSet<BlockPos> logs, LinkedHashSet<BlockPos> leaves) {
-    var blocks = new LinkedHashSet<BlockPos>();
+  private boolean isHoldingAxe(ServerPlayer player) {
+    return player.getMainHandItem().is(ItemTags.AXES);
+  }
+
+  private LinkedHashSet<BlockPos> breakableLogs(
+      BlockPos brokeLogPos, LinkedHashSet<BlockPos> logs) {
+    var breakableLogs = new LinkedHashSet<BlockPos>();
     for (var pos : logs) {
       if (!pos.equals(brokeLogPos)) {
-        blocks.add(pos);
+        breakableLogs.add(pos);
       }
     }
 
+    return breakableLogs;
+  }
+
+  private LinkedHashSet<BlockPos> breakOrder(
+      LinkedHashSet<BlockPos> logs, LinkedHashSet<BlockPos> leaves) {
+    var blocks = new LinkedHashSet<BlockPos>();
+
+    blocks.addAll(logs);
     blocks.addAll(leaves);
 
     return blocks;

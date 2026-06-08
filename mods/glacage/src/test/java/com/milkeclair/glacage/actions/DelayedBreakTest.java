@@ -42,7 +42,7 @@ class DelayedBreakTest {
     @DisplayName("次のバッチに空気ブロックと通常ブロックがある場合")
     class EmptyAndFilledBlocks {
       @Test
-      @DisplayName("空気ではないブロックだけを破壊する")
+      @DisplayName("空気ではないブロックだけを耐久消費なしで破壊する")
       void destroysOnlyFilledBlocks() {
         var first = new BlockPos(0, 0, 0);
         var second = new BlockPos(0, 1, 0);
@@ -58,9 +58,41 @@ class DelayedBreakTest {
         delayedBreak.tick();
 
         verify(player.gameMode(), never()).destroyBlock(first);
-        verify(player.gameMode()).destroyBlock(second);
+        verify(level, never()).destroyBlock(first, true, player.serverPlayer());
+        verify(level).destroyBlock(second, true, player.serverPlayer());
+        verify(player.gameMode(), never()).destroyBlock(second);
         verify(player.gameMode(), never()).destroyBlock(third);
+        verify(level, never()).destroyBlock(third, true, player.serverPlayer());
         assertThat(delayedBreak.isFinished()).isFalse();
+      }
+    }
+
+    @Nested
+    @DisplayName("次のバッチに耐久対象ブロックと耐久対象外ブロックがある場合")
+    class DurabilityAndNonDurabilityBlocks {
+      @Test
+      @DisplayName("耐久対象ブロックだけをプレイヤーの採掘として破壊する")
+      void destroysDurabilityBlocksWithPlayerGameMode() {
+        var log = new BlockPos(0, 0, 0);
+        var leaf = new BlockPos(0, 1, 0);
+        var level = mock(ServerLevel.class);
+        var player = new FakePlayer();
+        var delayedBreak =
+            new DelayedBreak(
+                player.serverPlayer(),
+                level,
+                new LinkedHashSet<>(List.of(log, leaf)),
+                new LinkedHashSet<>(List.of(log)));
+        when(level.isEmptyBlock(log)).thenReturn(false);
+        when(level.isEmptyBlock(leaf)).thenReturn(false);
+
+        delayedBreak.tick();
+
+        verify(player.gameMode()).destroyBlock(log);
+        verify(level, never()).destroyBlock(log, true, player.serverPlayer());
+        verify(player.gameMode(), never()).destroyBlock(leaf);
+        verify(level).destroyBlock(leaf, true, player.serverPlayer());
+        assertThat(delayedBreak.isFinished()).isTrue();
       }
     }
   }
