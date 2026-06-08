@@ -22,6 +22,9 @@ class FeatureTest {
         Feature.CODEC.encode(buffer, Feature.LUMBERJACK);
 
         assertThat(Feature.CODEC.decode(buffer)).isEqualTo(Feature.LUMBERJACK);
+        Feature.CODEC.encode(buffer, Feature.FOODIE);
+
+        assertThat(Feature.CODEC.decode(buffer)).isEqualTo(Feature.FOODIE);
       } finally {
         buffer.release();
       }
@@ -38,6 +41,7 @@ class FeatureTest {
       @DisplayName("Featureを返す")
       void returnsFeature() {
         assertThat(Feature.fromKey("lumberjack")).isEqualTo(Feature.LUMBERJACK);
+        assertThat(Feature.fromKey("foodie")).isEqualTo(Feature.FOODIE);
       }
     }
 
@@ -61,6 +65,7 @@ class FeatureTest {
     @DisplayName("configとpayload用のkeyを返す")
     void returnsKey() {
       assertThat(Feature.LUMBERJACK.key()).isEqualTo("lumberjack");
+      assertThat(Feature.FOODIE.key()).isEqualTo("foodie");
     }
   }
 
@@ -71,6 +76,7 @@ class FeatureTest {
     @DisplayName("config fallback用の説明を返す")
     void returnsComment() {
       assertThat(Feature.LUMBERJACK.comment()).isEqualTo("Do you have three axes?");
+      assertThat(Feature.FOODIE.comment()).isEqualTo("Can't you tell if you're full or not?");
     }
   }
 
@@ -81,6 +87,7 @@ class FeatureTest {
     @DisplayName("デフォルトの有効状態を返す")
     void returnsDefaultEnabled() {
       assertThat(Feature.LUMBERJACK.defaultEnabled()).isTrue();
+      assertThat(Feature.FOODIE.defaultEnabled()).isTrue();
     }
   }
 
@@ -92,6 +99,8 @@ class FeatureTest {
     void returnsTranslationKey() {
       assertThat(Feature.LUMBERJACK.translationKey())
           .isEqualTo("glacage.configuration.features.lumberjack");
+      assertThat(Feature.FOODIE.translationKey())
+          .isEqualTo("glacage.configuration.features.foodie");
     }
   }
 }

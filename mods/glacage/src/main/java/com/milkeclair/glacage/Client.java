@@ -2,8 +2,10 @@ package com.milkeclair.glacage;
 
 import com.milkeclair.glacage.config.Feature;
 import com.milkeclair.glacage.config.feature.SyncPayload;
+import com.milkeclair.glacage.usecases.Foodie;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -15,8 +17,9 @@ import net.neoforged.neoforge.common.NeoForge;
 /* クライアント側。 */
 @Mod(value = Glacage.MOD_ID, dist = Dist.CLIENT)
 public class Client {
-  public Client(ModContainer container) {
+  public Client(IEventBus modEventBus, ModContainer container) {
     Config.setSyncer(Client::syncFeature);
+    modEventBus.register(new Foodie());
     NeoForge.EVENT_BUS.addListener(Client::syncFeaturesOnLogin);
 
     container.registerExtensionPoint(

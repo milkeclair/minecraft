@@ -4,11 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.milkeclair.glacage.config.Feature;
+import com.milkeclair.glacage.usecases.Foodie;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -44,22 +47,39 @@ class ClientTest {
     @Test
     @DisplayName("config screenを登録する")
     void registersConfigScreen() {
+      var modEventBus = mock(IEventBus.class);
       var container = mock(ModContainer.class);
 
-      new Client(container);
+      new Client(modEventBus, container);
 
       verify(container)
           .registerExtensionPoint(eq(IConfigScreenFactory.class), any(IConfigScreenFactory.class));
     }
 
     @Test
-    @DisplayName("Minecraft初期化前のconfig同期を無視する")
-    void ignoresConfigSyncBeforeMinecraftInitialization() {
+    @DisplayName("Foodieを登録する")
+    void registersFoodie() {
+      var modEventBus = mock(IEventBus.class);
       var container = mock(ModContainer.class);
 
-      new Client(container);
+      new Client(modEventBus, container);
 
-      assertThatCode(() -> Config.sync(Feature.LUMBERJACK)).doesNotThrowAnyException();
+      verify(modEventBus).register(isA(Foodie.class));
+    }
+
+    @Nested
+    @DisplayName("Minecraft初期化前の場合")
+    class BeforeMinecraftInitialization {
+      @Test
+      @DisplayName("config同期で例外を投げない")
+      void doesNotThrowOnConfigSync() {
+        var modEventBus = mock(IEventBus.class);
+        var container = mock(ModContainer.class);
+
+        new Client(modEventBus, container);
+
+        assertThatCode(() -> Config.sync(Feature.LUMBERJACK)).doesNotThrowAnyException();
+      }
     }
   }
 }

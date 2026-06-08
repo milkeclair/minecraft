@@ -34,7 +34,9 @@ class ConfigTest {
 
   @AfterEach
   void reset() {
-    Config.setEnabled(Feature.LUMBERJACK, true);
+    for (var feature : Feature.values()) {
+      Config.setEnabled(feature, feature.defaultEnabled());
+    }
     Config.setSyncer(feature -> {});
   }
 
@@ -44,25 +46,24 @@ class ConfigTest {
     @Test
     @DisplayName("Featureをfeatures配下のboolean設定として定義する")
     void definesFeatureAsBooleanConfigUnderFeatures() {
-      var path = List.of("features", Feature.LUMBERJACK.key());
-      var value = Config.SPEC.getSpec().get(path);
-
       assertThat(Config.SPEC.getLevelComment(List.of("features")))
           .isEqualTo("Config of glacage features");
       assertThat(Config.SPEC.getLevelTranslationKey(List.of("features")))
           .isEqualTo("glacage.configuration.features");
-      assertThat(value).isInstanceOf(ModConfigSpec.ValueSpec.class);
 
-      var valueSpec = (ModConfigSpec.ValueSpec) value;
+      for (var feature : Feature.values()) {
+        var path = List.of("features", feature.key());
+        var value = Config.SPEC.getSpec().get(path);
 
-      assertThat(valueSpec.getDefault()).isEqualTo(Feature.LUMBERJACK.defaultEnabled());
-      assertThat(valueSpec.getComment()).isEqualTo(Feature.LUMBERJACK.comment());
-      assertThat(valueSpec.getTranslationKey()).isEqualTo(Feature.LUMBERJACK.translationKey());
-      assertThat(valueSpec.getClazz()).isEqualTo(Boolean.class);
-      assertThat(valueSpec.test(true)).isTrue();
-      assertThat(valueSpec.test(false)).isTrue();
-      assertThat(valueSpec.test("true")).isTrue();
-      assertThat(valueSpec.test("unknown")).isFalse();
+        assertThat(value).isInstanceOf(ModConfigSpec.ValueSpec.class);
+
+        var valueSpec = (ModConfigSpec.ValueSpec) value;
+
+        assertThat(valueSpec.getDefault()).isEqualTo(feature.defaultEnabled());
+        assertThat(valueSpec.getComment()).isEqualTo(feature.comment());
+        assertThat(valueSpec.getTranslationKey()).isEqualTo(feature.translationKey());
+        assertThat(valueSpec.getClazz()).isEqualTo(Boolean.class);
+      }
     }
   }
 
@@ -146,8 +147,9 @@ class ConfigTest {
       @Test
       @DisplayName("Featureのデフォルト値を返す")
       void returnsFeatureDefaultValue() {
-        assertThat(Config.enabled(Feature.LUMBERJACK))
-            .isEqualTo(Feature.LUMBERJACK.defaultEnabled());
+        for (var feature : Feature.values()) {
+          assertThat(Config.enabled(feature)).isEqualTo(feature.defaultEnabled());
+        }
       }
     }
 

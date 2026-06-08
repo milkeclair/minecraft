@@ -4,6 +4,8 @@
   "glacage.configuration.section.glacage.client.toml.title": "Glacage Configuration",
   "glacage.configuration.features": "Features",
   "glacage.configuration.features.button": "Edit",
+  "glacage.configuration.features.foodie": "Foodie",
+  "glacage.configuration.features.foodie.tooltip": "Can't you tell if you're full or not?",
   "glacage.configuration.features.lumberjack": "Lumberjack",
   "glacage.configuration.features.lumberjack.tooltip": "Do you have three axes?"
 }

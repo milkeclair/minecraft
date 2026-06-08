@@ -7,7 +7,10 @@ import net.minecraft.network.codec.StreamCodec;
 /* 機能設定。 */
 public enum Feature {
   /* 木こり機能。 */
-  LUMBERJACK("lumberjack", "Do you have three axes?", true);
+  LUMBERJACK("lumberjack", "Do you have three axes?", true),
+
+  /* 隠し満腹度表示機能。 */
+  FOODIE("foodie", "Can't you tell if you're full or not?", true);
 
   /*
    * codec。

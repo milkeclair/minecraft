@@ -9,3 +9,7 @@ run = "./gradlew verifyAll"
 [tasks.manual]
 dir = "{{cwd}}"
 run = "./gradlew runWindowsClient"
+
+[tasks.wsl]
+dir = "{{cwd}}"
+run = "./gradlew runClient"
