@@ -1,5 +1,6 @@
 package com.milkeclair.glacage;
 
+import com.milkeclair.glacage.config.Config;
 import com.milkeclair.glacage.config.Network;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;

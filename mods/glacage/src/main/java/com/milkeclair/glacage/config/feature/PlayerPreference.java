@@ -1,6 +1,6 @@
 package com.milkeclair.glacage.config.feature;
 
-import com.milkeclair.glacage.Config;
+import com.milkeclair.glacage.config.Config;
 import java.util.HashMap;
 import java.util.UUID;
 import net.minecraft.server.level.ServerPlayer;

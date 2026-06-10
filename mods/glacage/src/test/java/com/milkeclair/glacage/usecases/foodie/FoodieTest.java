@@ -1,4 +1,4 @@
-package com.milkeclair.glacage.usecases;
+package com.milkeclair.glacage.usecases.foodie;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.verify;
 
 import com.milkeclair.glacage.config.feature.Feature;
-import com.milkeclair.glacage.usecases.foodie.Saturation;
+import com.milkeclair.glacage.usecases.foodie.saturation.Saturation;
 import java.util.ArrayList;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;

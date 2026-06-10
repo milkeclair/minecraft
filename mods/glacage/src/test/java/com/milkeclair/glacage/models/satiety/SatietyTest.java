@@ -1,4 +1,4 @@
-package com.milkeclair.glacage.models;
+package com.milkeclair.glacage.models.satiety;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

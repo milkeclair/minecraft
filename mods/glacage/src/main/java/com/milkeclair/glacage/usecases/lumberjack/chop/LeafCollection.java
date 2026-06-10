@@ -1,10 +1,10 @@
 package com.milkeclair.glacage.usecases.lumberjack.chop;
 
-import com.milkeclair.glacage.actions.search.BreadthFirst;
+import com.milkeclair.glacage.actions.search.breadthFirst.BreadthFirst;
 import com.milkeclair.glacage.actions.search.breadthFirst.Node;
 import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
 import com.milkeclair.glacage.models.Leaf;
-import com.milkeclair.glacage.usecases.Lumberjack;
+import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;

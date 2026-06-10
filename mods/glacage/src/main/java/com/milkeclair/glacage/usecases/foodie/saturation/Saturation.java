@@ -1,7 +1,5 @@
-package com.milkeclair.glacage.usecases.foodie;
+package com.milkeclair.glacage.usecases.foodie.saturation;
 
-import com.milkeclair.glacage.usecases.foodie.saturation.Icons;
-import com.milkeclair.glacage.usecases.foodie.saturation.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;

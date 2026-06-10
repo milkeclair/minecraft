@@ -1,4 +1,4 @@
-package com.milkeclair.glacage.models;
+package com.milkeclair.glacage.models.satiety;
 
 /* 満腹度。 */
 public class Satiety {

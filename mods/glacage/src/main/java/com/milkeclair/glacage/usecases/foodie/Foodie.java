@@ -1,8 +1,8 @@
-package com.milkeclair.glacage.usecases;
+package com.milkeclair.glacage.usecases.foodie;
 
 import com.milkeclair.glacage.Glacage;
 import com.milkeclair.glacage.config.feature.Feature;
-import com.milkeclair.glacage.usecases.foodie.Saturation;
+import com.milkeclair.glacage.usecases.foodie.saturation.Saturation;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;

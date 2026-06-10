@@ -1,6 +1,6 @@
 package com.milkeclair.glacage;
 
-import com.milkeclair.glacage.usecases.Lumberjack;
+import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import net.neoforged.neoforge.common.NeoForge;
 
 /** イベント登録を行う。 */

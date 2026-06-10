@@ -1,10 +1,10 @@
-package com.milkeclair.glacage.usecases.lumberjack;
+package com.milkeclair.glacage.usecases.lumberjack.chop;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.iterable;
 import static org.mockito.Mockito.mockConstruction;
 
-import com.milkeclair.glacage.actions.DelayedBreak;
+import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
 import com.milkeclair.glacage.helpers.FakeLevel;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import java.util.List;

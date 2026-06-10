@@ -3,7 +3,7 @@ package com.milkeclair.glacage.usecases.lumberjack.chop;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.milkeclair.glacage.helpers.FakeLevel;
-import com.milkeclair.glacage.usecases.Lumberjack;
+import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.block.Blocks;

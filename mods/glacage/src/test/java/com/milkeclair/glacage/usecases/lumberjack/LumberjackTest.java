@@ -1,4 +1,4 @@
-package com.milkeclair.glacage.usecases;
+package com.milkeclair.glacage.usecases.lumberjack;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doAnswer;
@@ -9,14 +9,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.milkeclair.glacage.Config;
-import com.milkeclair.glacage.actions.DelayedBreak;
+import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
+import com.milkeclair.glacage.config.Config;
 import com.milkeclair.glacage.config.feature.Feature;
 import com.milkeclair.glacage.config.feature.Flag;
 import com.milkeclair.glacage.config.feature.PlayerPreference;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
-import com.milkeclair.glacage.usecases.lumberjack.Chop;
+import com.milkeclair.glacage.usecases.lumberjack.chop.Chop;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

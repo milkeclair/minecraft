@@ -1,7 +1,7 @@
 package com.milkeclair.glacage.helpers;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
-import com.milkeclair.glacage.Config;
+import com.milkeclair.glacage.config.Config;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import net.neoforged.fml.config.IConfigSpec;

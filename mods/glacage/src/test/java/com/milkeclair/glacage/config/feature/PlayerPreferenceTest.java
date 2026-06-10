@@ -2,7 +2,7 @@ package com.milkeclair.glacage.config.feature;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.milkeclair.glacage.Config;
+import com.milkeclair.glacage.config.Config;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import java.util.UUID;

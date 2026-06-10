@@ -1,8 +1,9 @@
 package com.milkeclair.glacage;
 
+import com.milkeclair.glacage.config.Config;
 import com.milkeclair.glacage.config.feature.Flag;
 import com.milkeclair.glacage.config.feature.Payload;
-import com.milkeclair.glacage.usecases.Foodie;
+import com.milkeclair.glacage.usecases.foodie.Foodie;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;

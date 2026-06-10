@@ -1,7 +1,5 @@
-package com.milkeclair.glacage.actions.search;
+package com.milkeclair.glacage.actions.search.breadthFirst;
 
-import com.milkeclair.glacage.actions.search.breadthFirst.Node;
-import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashSet;

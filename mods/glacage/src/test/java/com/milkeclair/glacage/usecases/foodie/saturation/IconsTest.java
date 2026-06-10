@@ -2,8 +2,8 @@ package com.milkeclair.glacage.usecases.foodie.saturation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.milkeclair.glacage.models.Satiety;
 import com.milkeclair.glacage.models.satiety.Bar;
+import com.milkeclair.glacage.models.satiety.Satiety;
 import net.minecraft.resources.Identifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

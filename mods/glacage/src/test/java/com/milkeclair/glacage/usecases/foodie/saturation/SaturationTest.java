@@ -1,13 +1,12 @@
-package com.milkeclair.glacage.usecases.foodie;
+package com.milkeclair.glacage.usecases.foodie.saturation;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import com.milkeclair.glacage.models.Satiety;
 import com.milkeclair.glacage.models.satiety.Bar;
-import com.milkeclair.glacage.usecases.foodie.saturation.State;
+import com.milkeclair.glacage.models.satiety.Satiety;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;

@@ -1,4 +1,4 @@
-package com.milkeclair.glacage;
+package com.milkeclair.glacage.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

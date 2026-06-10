@@ -1,9 +1,8 @@
-package com.milkeclair.glacage.usecases.foodie;
+package com.milkeclair.glacage.usecases.foodie.saturation;
 
-import com.milkeclair.glacage.models.Satiety;
 import com.milkeclair.glacage.models.satiety.Bar;
+import com.milkeclair.glacage.models.satiety.Satiety;
 import com.milkeclair.glacage.models.satiety.Visibility;
-import com.milkeclair.glacage.usecases.foodie.saturation.State;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.effect.MobEffects;

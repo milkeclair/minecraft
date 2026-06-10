@@ -1,8 +1,8 @@
-package com.milkeclair.glacage.usecases;
+package com.milkeclair.glacage.usecases.lumberjack;
 
-import com.milkeclair.glacage.actions.DelayedBreak;
+import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
 import com.milkeclair.glacage.config.feature.Feature;
-import com.milkeclair.glacage.usecases.lumberjack.Chop;
+import com.milkeclair.glacage.usecases.lumberjack.chop.Chop;
 import java.util.ArrayDeque;
 import net.minecraft.core.BlockPos;
 import net.neoforged.bus.api.EventPriority;

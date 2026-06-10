@@ -1,9 +1,7 @@
-package com.milkeclair.glacage.usecases.lumberjack;
+package com.milkeclair.glacage.usecases.lumberjack.chop;
 
-import com.milkeclair.glacage.actions.DelayedBreak;
+import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
 import com.milkeclair.glacage.models.Log;
-import com.milkeclair.glacage.usecases.lumberjack.chop.LeafCollection;
-import com.milkeclair.glacage.usecases.lumberjack.chop.LogCollection;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;

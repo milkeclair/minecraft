@@ -1,8 +1,8 @@
 package com.milkeclair.glacage.usecases.foodie.saturation;
 
 import com.milkeclair.glacage.Glacage;
-import com.milkeclair.glacage.models.Satiety;
 import com.milkeclair.glacage.models.satiety.Bar;
+import com.milkeclair.glacage.models.satiety.Satiety;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.resources.Identifier;

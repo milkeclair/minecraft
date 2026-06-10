@@ -1,10 +1,8 @@
-package com.milkeclair.glacage.actions.search;
+package com.milkeclair.glacage.actions.search.breadthFirst;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.milkeclair.glacage.actions.search.breadthFirst.Node;
-import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

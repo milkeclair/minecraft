@@ -8,8 +8,9 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import com.milkeclair.glacage.config.Config;
 import com.milkeclair.glacage.config.feature.Feature;
-import com.milkeclair.glacage.usecases.Foodie;
+import com.milkeclair.glacage.usecases.foodie.Foodie;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;

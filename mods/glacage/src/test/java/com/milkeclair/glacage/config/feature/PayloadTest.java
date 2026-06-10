@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.milkeclair.glacage.Config;
+import com.milkeclair.glacage.config.Config;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import io.netty.buffer.Unpooled;

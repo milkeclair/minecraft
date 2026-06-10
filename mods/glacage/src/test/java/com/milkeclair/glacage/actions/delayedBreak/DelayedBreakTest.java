@@ -1,4 +1,4 @@
-package com.milkeclair.glacage.actions;
+package com.milkeclair.glacage.actions.delayedBreak;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
