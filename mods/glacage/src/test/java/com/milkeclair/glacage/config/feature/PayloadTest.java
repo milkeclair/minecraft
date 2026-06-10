@@ -5,8 +5,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.milkeclair.glacage.Config;
-import com.milkeclair.glacage.config.Feature;
-import com.milkeclair.glacage.config.PlayerSettings;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import io.netty.buffer.Unpooled;
@@ -22,8 +20,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("SyncPayload")
-class SyncPayloadTest {
+@DisplayName("Payload")
+class PayloadTest {
   @BeforeEach
   void loadConfig() {
     FakeConfig.load();
@@ -31,8 +29,10 @@ class SyncPayloadTest {
 
   @AfterEach
   void reset() {
-    PlayerSettings.clear();
-    Config.setEnabled(Feature.LUMBERJACK, true);
+    PlayerPreference.clear();
+    for (var flag : Flag.values()) {
+      Config.setEnabled(flag, flag.defaultEnabled());
+    }
   }
 
   @Nested
@@ -44,12 +44,12 @@ class SyncPayloadTest {
       var buffer =
           new RegistryFriendlyByteBuf(
               Unpooled.buffer(), RegistryAccess.EMPTY, ConnectionType.NEOFORGE);
-      var payload = new SyncPayload(Feature.LUMBERJACK, false);
+      var payload = new Payload(Feature.LUMBERJACK.CHOP, false);
 
       try {
-        SyncPayload.CODEC.encode(buffer, payload);
+        Payload.CODEC.encode(buffer, payload);
 
-        assertThat(SyncPayload.CODEC.decode(buffer)).isEqualTo(payload);
+        assertThat(Payload.CODEC.decode(buffer)).isEqualTo(payload);
       } finally {
         buffer.release();
       }
@@ -62,9 +62,9 @@ class SyncPayloadTest {
     @Test
     @DisplayName("payload typeを返す")
     void returnsPayloadType() {
-      var payload = new SyncPayload(Feature.LUMBERJACK, true);
+      var payload = new Payload(Feature.LUMBERJACK.CHOP, true);
 
-      assertThat(payload.type()).isSameAs(SyncPayload.TYPE);
+      assertThat(payload.type()).isSameAs(Payload.TYPE);
       assertThat(payload.type().id().toString()).isEqualTo("glacage:sync_feature_config");
     }
   }
@@ -84,9 +84,10 @@ class SyncPayloadTest {
 
         when(context.player()).thenReturn(player.serverPlayer());
 
-        SyncPayload.handle(new SyncPayload(Feature.LUMBERJACK, false), context);
+        Payload.handle(new Payload(Feature.LUMBERJACK.CHOP, false), context);
 
-        assertThat(PlayerSettings.enabled(Feature.LUMBERJACK, player.serverPlayer())).isFalse();
+        assertThat(PlayerPreference.enabled(Feature.LUMBERJACK.CHOP, player.serverPlayer()))
+            .isFalse();
       }
     }
 
@@ -101,12 +102,13 @@ class SyncPayloadTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
         when(context.player()).thenReturn(contextPlayer);
 
-        SyncPayload.handle(new SyncPayload(Feature.LUMBERJACK, false), context);
+        Payload.handle(new Payload(Feature.LUMBERJACK.CHOP, false), context);
 
-        assertThat(PlayerSettings.enabled(Feature.LUMBERJACK, player.serverPlayer())).isTrue();
+        assertThat(PlayerPreference.enabled(Feature.LUMBERJACK.CHOP, player.serverPlayer()))
+            .isTrue();
       }
     }
   }

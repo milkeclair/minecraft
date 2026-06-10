@@ -17,7 +17,7 @@ public class Saturation {
     this(guiGraphics, new SaturationState(Minecraft.getInstance(), guiGraphics));
   }
 
-  Saturation(GuiGraphics guiGraphics, State state) {
+  public Saturation(GuiGraphics guiGraphics, State state) {
     this.guiGraphics = guiGraphics;
     this.state = state;
   }

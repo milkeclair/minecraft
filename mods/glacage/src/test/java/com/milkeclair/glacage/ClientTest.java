@@ -8,7 +8,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.milkeclair.glacage.config.Feature;
+import com.milkeclair.glacage.config.feature.Feature;
 import com.milkeclair.glacage.usecases.Foodie;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 class ClientTest {
   @AfterEach
   void reset() {
-    Config.setSyncer(feature -> {});
+    Config.setSyncer(flag -> {});
   }
 
   @Nested

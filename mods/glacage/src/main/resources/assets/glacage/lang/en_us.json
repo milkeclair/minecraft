@@ -5,7 +5,15 @@
   "glacage.configuration.features": "Features",
   "glacage.configuration.features.button": "Edit",
   "glacage.configuration.features.foodie": "Foodie",
-  "glacage.configuration.features.foodie.tooltip": "Can't you tell if you're full or not?",
+  "glacage.configuration.features.foodie.tooltip": "Food related",
+  "glacage.configuration.features.foodie.enabled": "Enabled",
+  "glacage.configuration.features.foodie.enabled.tooltip": "Enable Foodie features.",
+  "glacage.configuration.features.foodie.saturation": "Saturation",
+  "glacage.configuration.features.foodie.saturation.tooltip": "Show hidden saturation on the food bar.",
   "glacage.configuration.features.lumberjack": "Lumberjack",
-  "glacage.configuration.features.lumberjack.tooltip": "Do you have three axes?"
+  "glacage.configuration.features.lumberjack.tooltip": "Lumberjack related",
+  "glacage.configuration.features.lumberjack.chop": "Chop",
+  "glacage.configuration.features.lumberjack.chop.tooltip": "Break a whole tree when chopping a log.",
+  "glacage.configuration.features.lumberjack.enabled": "Enabled",
+  "glacage.configuration.features.lumberjack.enabled.tooltip": "Enable Lumberjack features."
 }

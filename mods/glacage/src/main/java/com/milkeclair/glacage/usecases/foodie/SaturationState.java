@@ -10,11 +10,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 /* Minecraftから隠し満腹度表示に必要な状態を取り出す。 */
-class SaturationState implements State {
+public class SaturationState implements State {
   private final Minecraft minecraft;
   private final GuiGraphics guiGraphics;
 
-  SaturationState(Minecraft minecraft, GuiGraphics guiGraphics) {
+  public SaturationState(Minecraft minecraft, GuiGraphics guiGraphics) {
     this.minecraft = minecraft;
     this.guiGraphics = guiGraphics;
   }

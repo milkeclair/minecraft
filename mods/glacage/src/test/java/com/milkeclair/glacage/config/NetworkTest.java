@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.milkeclair.glacage.Glacage;
-import com.milkeclair.glacage.config.feature.SyncPayload;
+import com.milkeclair.glacage.config.feature.Payload;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.junit.jupiter.api.DisplayName;
@@ -20,18 +20,18 @@ class NetworkTest {
   @DisplayName(".register")
   class Register {
     @Test
-    @DisplayName("Feature設定同期payloadをserver-boundで登録する")
-    void registersSyncPayload() {
+    @DisplayName("機能設定同期payloadをserver-boundで登録する")
+    void registersPayload() {
       var event = mock(RegisterPayloadHandlersEvent.class);
       var registrar = mock(PayloadRegistrar.class);
 
       when(event.registrar(Glacage.MOD_ID)).thenReturn(registrar);
-      when(registrar.playToServer(eq(SyncPayload.TYPE), eq(SyncPayload.CODEC), any()))
+      when(registrar.playToServer(eq(Payload.TYPE), eq(Payload.CODEC), any()))
           .thenReturn(registrar);
 
       Network.register(event);
 
-      verify(registrar).playToServer(eq(SyncPayload.TYPE), eq(SyncPayload.CODEC), any());
+      verify(registrar).playToServer(eq(Payload.TYPE), eq(Payload.CODEC), any());
     }
   }
 }

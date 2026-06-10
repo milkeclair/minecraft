@@ -5,9 +5,9 @@ import com.milkeclair.glacage.models.satiety.Bar;
 
 /* 隠し満腹度表示に必要な状態。 */
 public interface State {
-  boolean canRender();
+  public boolean canRender();
 
-  Satiety satiety();
+  public Satiety satiety();
 
-  Bar bar();
+  public Bar bar();
 }

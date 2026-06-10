@@ -6,16 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("OverrideClient")
-class OverrideClientTest {
+@DisplayName("Mode")
+class ModeTest {
   @Nested
   @DisplayName(".values")
   class Values {
     @Test
     @DisplayName("ユーザー設定、強制有効、強制無効を持つ")
     void hasOverrideOptions() {
-      assertThat(OverrideClient.values())
-          .containsExactly(OverrideClient.USER, OverrideClient.ENABLED, OverrideClient.DISABLED);
+      assertThat(Mode.values()).containsExactly(Mode.USER, Mode.ENABLED, Mode.DISABLED);
     }
   }
 }

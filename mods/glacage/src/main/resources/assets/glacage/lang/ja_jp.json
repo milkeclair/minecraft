@@ -5,7 +5,15 @@
   "glacage.configuration.features": "機能",
   "glacage.configuration.features.button": "編集",
   "glacage.configuration.features.foodie": "グルメ",
-  "glacage.configuration.features.foodie.tooltip": "自分が満腹かどうか分かりますか?",
+  "glacage.configuration.features.foodie.tooltip": "食事関連",
+  "glacage.configuration.features.foodie.enabled": "有効",
+  "glacage.configuration.features.foodie.enabled.tooltip": "グルメ機能を有効にします。",
+  "glacage.configuration.features.foodie.saturation": "隠し満腹度",
+  "glacage.configuration.features.foodie.saturation.tooltip": "隠し満腹度を表示します。",
   "glacage.configuration.features.lumberjack": "木こり",
-  "glacage.configuration.features.lumberjack.tooltip": "斧を3本持っていますか?"
+  "glacage.configuration.features.lumberjack.tooltip": "木こり関連",
+  "glacage.configuration.features.lumberjack.chop": "伐採",
+  "glacage.configuration.features.lumberjack.chop.tooltip": "原木を壊したときに木全体を壊します。",
+  "glacage.configuration.features.lumberjack.enabled": "有効",
+  "glacage.configuration.features.lumberjack.enabled.tooltip": "木こり機能を有効にします。"
 }

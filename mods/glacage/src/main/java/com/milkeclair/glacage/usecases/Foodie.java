@@ -1,8 +1,7 @@
 package com.milkeclair.glacage.usecases;
 
 import com.milkeclair.glacage.Glacage;
-import com.milkeclair.glacage.config.Feature;
-import com.milkeclair.glacage.config.Features;
+import com.milkeclair.glacage.config.feature.Feature;
 import com.milkeclair.glacage.usecases.foodie.Saturation;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,7 +24,7 @@ public class Foodie {
 
   /* 隠し満腹度の表示処理。 deltaTrackerは使っていない。 */
   public void renderSaturation(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-    if (Features.enabled(Feature.FOODIE)) {
+    if (Feature.enabled(Feature.FOODIE.SATURATION)) {
       new Saturation(guiGraphics).render();
     }
   }

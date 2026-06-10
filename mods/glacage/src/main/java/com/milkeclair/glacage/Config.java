@@ -1,7 +1,8 @@
 package com.milkeclair.glacage;
 
-import com.milkeclair.glacage.config.Feature;
-import java.util.EnumMap;
+import com.milkeclair.glacage.config.feature.Flag;
+import com.milkeclair.glacage.config.feature.Group;
+import java.util.HashMap;
 import java.util.function.Consumer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,9 +15,8 @@ public class Config {
   // Neoforgeの設定。
   public static final ModConfigSpec SPEC;
 
-  private static final EnumMap<Feature, ModConfigSpec.BooleanValue> ENABLED_VALUES =
-      new EnumMap<>(Feature.class);
-  private static Consumer<Feature> syncer = feature -> {};
+  private static final HashMap<Flag, ModConfigSpec.BooleanValue> ENABLED_VALUES = new HashMap<>();
+  private static Consumer<Flag> syncer = flag -> {};
 
   static {
     var builder = new ModConfigSpec.Builder();
@@ -26,13 +26,20 @@ public class Config {
         .translation("glacage.configuration.features")
         .push("features");
 
-    for (var feature : Feature.values()) {
-      ENABLED_VALUES.put(
-          feature,
-          builder
-              .comment(feature.comment())
-              .translation(feature.translationKey())
-              .define(feature.key(), feature.defaultEnabled()));
+    for (var group : Group.values()) {
+      var groupFlag = Flag.fromGroup(group);
+      builder.comment(groupFlag.comment()).translation(group.translationKey()).push(group.key());
+
+      for (var flag : Flag.forGroup(group)) {
+        ENABLED_VALUES.put(
+            flag,
+            builder
+                .comment(flag.comment())
+                .translation(flag.translationKey())
+                .define(flag.configKey(), flag.defaultEnabled()));
+      }
+
+      builder.pop();
     }
     // featuresから抜ける。
     builder.pop();
@@ -51,8 +58,8 @@ public class Config {
   }
 
   /* 有効かどうかの判定。 */
-  public static boolean enabled(Feature feature) {
-    var value = ENABLED_VALUES.get(feature);
+  public static boolean enabled(Flag flag) {
+    var value = ENABLED_VALUES.get(flag);
     if (!SPEC.isLoaded()) {
       return value.getDefault();
     }
@@ -61,24 +68,24 @@ public class Config {
   }
 
   /* 有効、無効の切り替え。 */
-  public static void setEnabled(Feature feature, boolean enabled) {
-    ENABLED_VALUES.get(feature).set(enabled);
+  public static void setEnabled(Flag flag, boolean enabled) {
+    ENABLED_VALUES.get(flag).set(enabled);
   }
 
   /* 設定の同期関数。 */
-  public static void setSyncer(Consumer<Feature> syncer) {
+  public static void setSyncer(Consumer<Flag> syncer) {
     Config.syncer = syncer;
   }
 
-  /* 同期。syncerにfeatureをyieldする。 */
-  public static void sync(Feature feature) {
-    syncer.accept(feature);
+  /* 同期。syncerにflagをyieldする。 */
+  public static void sync(Flag flag) {
+    syncer.accept(flag);
   }
 
-  /* 全設定の同期。 */
+  /* 全フラグの同期。 */
   public static void syncAll() {
-    for (var feature : Feature.values()) {
-      sync(feature);
+    for (var flag : Flag.values()) {
+      sync(flag);
     }
   }
 

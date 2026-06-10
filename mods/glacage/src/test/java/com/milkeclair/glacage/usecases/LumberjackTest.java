@@ -11,9 +11,9 @@ import static org.mockito.Mockito.when;
 
 import com.milkeclair.glacage.Config;
 import com.milkeclair.glacage.actions.DelayedBreak;
-import com.milkeclair.glacage.config.Feature;
-import com.milkeclair.glacage.config.Features;
-import com.milkeclair.glacage.config.PlayerSettings;
+import com.milkeclair.glacage.config.feature.Feature;
+import com.milkeclair.glacage.config.feature.Flag;
+import com.milkeclair.glacage.config.feature.PlayerPreference;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import com.milkeclair.glacage.usecases.lumberjack.Chop;
@@ -39,9 +39,11 @@ class LumberjackTest {
 
   @AfterEach
   void reset() {
-    Features.clear();
-    PlayerSettings.clear();
-    Config.setEnabled(Feature.LUMBERJACK, true);
+    Feature.clear();
+    PlayerPreference.clear();
+    for (var flag : Flag.values()) {
+      Config.setEnabled(flag, flag.defaultEnabled());
+    }
   }
 
   @Nested
@@ -140,13 +142,13 @@ class LumberjackTest {
   class ChopEvent {
     @Nested
     @DisplayName("機能が無効の場合")
-    class DisabledFeature {
+    class DisabledSetting {
       @Test
       @DisplayName("Chopを作成しない")
       void doesNotConstructChop() {
         var event = mock(BlockEvent.BreakEvent.class);
         var lumberjack = new Lumberjack();
-        Features.forceDisable(Feature.LUMBERJACK);
+        Feature.forceDisable(Feature.LUMBERJACK.CHOP);
 
         try (var mockedChops = mockConstruction(Chop.class)) {
           lumberjack.chop(event);
@@ -168,8 +170,8 @@ class LumberjackTest {
         var lumberjack = new Lumberjack();
 
         when(event.getPlayer()).thenReturn(player.serverPlayer());
-        Config.setEnabled(Feature.LUMBERJACK, true);
-        PlayerSettings.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
+        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), false);
 
         try (var mockedChops = mockConstruction(Chop.class)) {
           lumberjack.chop(event);
@@ -242,7 +244,7 @@ class LumberjackTest {
   class BreakQueuedBlocks {
     @Nested
     @DisplayName("機能が無効の場合")
-    class DisabledFeature {
+    class DisabledSetting {
       @Test
       @DisplayName("遅延破壊を実行せず、キューを破棄する")
       void doesNotTickAndClearsQueue() {
@@ -251,15 +253,15 @@ class LumberjackTest {
         var tickEvent = mock(ServerTickEvent.Post.class);
         var lumberjack = new Lumberjack();
 
-        Features.forceEnable(Feature.LUMBERJACK);
+        Feature.forceEnable(Feature.LUMBERJACK.CHOP);
         try (var mockedChops =
             mockConstruction(
                 Chop.class,
                 (mock, context) -> when(mock.call()).thenReturn(Optional.of(delayedBreak)))) {
           lumberjack.chop(breakEvent);
-          Features.forceDisable(Feature.LUMBERJACK);
+          Feature.forceDisable(Feature.LUMBERJACK.CHOP);
           lumberjack.breakQueuedBlocks(tickEvent);
-          Features.forceEnable(Feature.LUMBERJACK);
+          Feature.forceEnable(Feature.LUMBERJACK.CHOP);
           lumberjack.breakQueuedBlocks(tickEvent);
 
           assertThat(mockedChops.constructed()).hasSize(1);
@@ -284,17 +286,17 @@ class LumberjackTest {
 
         when(breakEvent.getPlayer()).thenReturn(player.serverPlayer());
         when(delayedBreak.player()).thenReturn(player.serverPlayer());
-        Config.setEnabled(Feature.LUMBERJACK, true);
-        PlayerSettings.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
+        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), true);
 
         try (var mockedChops =
             mockConstruction(
                 Chop.class,
                 (mock, context) -> when(mock.call()).thenReturn(Optional.of(delayedBreak)))) {
           lumberjack.chop(breakEvent);
-          PlayerSettings.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
+          PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), false);
           lumberjack.breakQueuedBlocks(tickEvent);
-          PlayerSettings.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
+          PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), true);
           lumberjack.breakQueuedBlocks(tickEvent);
 
           assertThat(mockedChops.constructed()).hasSize(1);

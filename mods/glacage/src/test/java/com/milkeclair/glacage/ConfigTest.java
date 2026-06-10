@@ -7,7 +7,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.milkeclair.glacage.config.Feature;
+import com.milkeclair.glacage.config.feature.Feature;
+import com.milkeclair.glacage.config.feature.Flag;
+import com.milkeclair.glacage.config.feature.Group;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,34 +36,43 @@ class ConfigTest {
 
   @AfterEach
   void reset() {
-    for (var feature : Feature.values()) {
-      Config.setEnabled(feature, feature.defaultEnabled());
+    for (var flag : Flag.values()) {
+      Config.setEnabled(flag, flag.defaultEnabled());
     }
-    Config.setSyncer(feature -> {});
+    Config.setSyncer(flag -> {});
   }
 
   @Nested
   @DisplayName("SPEC")
   class Spec {
     @Test
-    @DisplayName("Featureをfeatures配下のboolean設定として定義する")
-    void definesFeatureAsBooleanConfigUnderFeatures() {
+    @DisplayName("Flagをfeatures配下のboolean設定として定義する")
+    void definesFlagsAsBooleanConfigUnderFeatures() {
       assertThat(Config.SPEC.getLevelComment(List.of("features")))
           .isEqualTo("Config of glacage features");
       assertThat(Config.SPEC.getLevelTranslationKey(List.of("features")))
           .isEqualTo("glacage.configuration.features");
 
-      for (var feature : Feature.values()) {
-        var path = List.of("features", feature.key());
+      for (var group : Group.values()) {
+        var groupFlag = Flag.fromGroup(group);
+
+        assertThat(Config.SPEC.getLevelComment(List.of("features", group.key())))
+            .isEqualTo(groupFlag.comment());
+        assertThat(Config.SPEC.getLevelTranslationKey(List.of("features", group.key())))
+            .isEqualTo(group.translationKey());
+      }
+
+      for (var flag : Flag.values()) {
+        var path = List.of("features", flag.group().key(), flag.configKey());
         var value = Config.SPEC.getSpec().get(path);
 
         assertThat(value).isInstanceOf(ModConfigSpec.ValueSpec.class);
 
         var valueSpec = (ModConfigSpec.ValueSpec) value;
 
-        assertThat(valueSpec.getDefault()).isEqualTo(feature.defaultEnabled());
-        assertThat(valueSpec.getComment()).isEqualTo(feature.comment());
-        assertThat(valueSpec.getTranslationKey()).isEqualTo(feature.translationKey());
+        assertThat(valueSpec.getDefault()).isEqualTo(flag.defaultEnabled());
+        assertThat(valueSpec.getComment()).isEqualTo(flag.comment());
+        assertThat(valueSpec.getTranslationKey()).isEqualTo(flag.translationKey());
         assertThat(valueSpec.getClazz()).isEqualTo(Boolean.class);
       }
     }
@@ -87,18 +98,18 @@ class ConfigTest {
     @DisplayName("Loadingイベントが発火した場合")
     class LoadingEvent {
       @Test
-      @DisplayName("同じspecならすべてのFeatureを同期する")
-      void syncsAllFeaturesForSameSpec() {
+      @DisplayName("同じspecならすべてのFlagを同期する")
+      void syncsAllSettingsForSameSpec() {
         var container = mock(ModContainer.class);
         var modEventBus = BusBuilder.builder().build();
-        var synced = new ArrayList<Feature>();
+        var synced = new ArrayList<Flag>();
 
         Config.setSyncer(synced::add);
         Config.register(container, modEventBus);
 
         modEventBus.post(new ModConfigEvent.Loading(modConfig(Config.SPEC)));
 
-        assertThat(synced).containsExactly(Feature.values());
+        assertThat(synced).containsExactly(Flag.values());
       }
 
       @Test
@@ -106,7 +117,7 @@ class ConfigTest {
       void ignoresDifferentSpec() {
         var container = mock(ModContainer.class);
         var modEventBus = BusBuilder.builder().build();
-        var synced = new ArrayList<Feature>();
+        var synced = new ArrayList<Flag>();
         var otherSpec = new ModConfigSpec.Builder().build();
 
         Config.setSyncer(synced::add);
@@ -122,18 +133,18 @@ class ConfigTest {
     @DisplayName("Reloadingイベントが発火した場合")
     class ReloadingEvent {
       @Test
-      @DisplayName("同じspecならすべてのFeatureを同期する")
-      void syncsAllFeaturesForSameSpec() {
+      @DisplayName("同じspecならすべてのFlagを同期する")
+      void syncsAllSettingsForSameSpec() {
         var container = mock(ModContainer.class);
         var modEventBus = BusBuilder.builder().build();
-        var synced = new ArrayList<Feature>();
+        var synced = new ArrayList<Flag>();
 
         Config.setSyncer(synced::add);
         Config.register(container, modEventBus);
 
         modEventBus.post(new ModConfigEvent.Reloading(modConfig(Config.SPEC)));
 
-        assertThat(synced).containsExactly(Feature.values());
+        assertThat(synced).containsExactly(Flag.values());
       }
     }
   }
@@ -145,10 +156,10 @@ class ConfigTest {
     @DisplayName("設定が更新されていない場合")
     class DefaultValue {
       @Test
-      @DisplayName("Featureのデフォルト値を返す")
-      void returnsFeatureDefaultValue() {
-        for (var feature : Feature.values()) {
-          assertThat(Config.enabled(feature)).isEqualTo(feature.defaultEnabled());
+      @DisplayName("Flagのデフォルト値を返す")
+      void returnsGroupDefaultValue() {
+        for (var flag : Flag.values()) {
+          assertThat(Config.enabled(flag)).isEqualTo(flag.defaultEnabled());
         }
       }
     }
@@ -159,9 +170,9 @@ class ConfigTest {
       @Test
       @DisplayName("更新後の値を返す")
       void returnsUpdatedValue() {
-        Config.setEnabled(Feature.LUMBERJACK, false);
+        Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
 
-        assertThat(Config.enabled(Feature.LUMBERJACK)).isFalse();
+        assertThat(Config.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
       }
     }
   }
@@ -172,19 +183,19 @@ class ConfigTest {
     @Test
     @DisplayName("設定を無効にする")
     void setsConfigToDisabled() {
-      Config.setEnabled(Feature.LUMBERJACK, false);
+      Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
 
-      assertThat(Config.enabled(Feature.LUMBERJACK)).isFalse();
+      assertThat(Config.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
     }
 
     @Test
     @DisplayName("設定を有効にする")
     void setsConfigToEnabled() {
-      Config.setEnabled(Feature.LUMBERJACK, false);
+      Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
 
-      Config.setEnabled(Feature.LUMBERJACK, true);
+      Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
 
-      assertThat(Config.enabled(Feature.LUMBERJACK)).isTrue();
+      assertThat(Config.enabled(Feature.LUMBERJACK.CHOP)).isTrue();
     }
   }
 
@@ -194,16 +205,16 @@ class ConfigTest {
     @Test
     @DisplayName("同期先を上書きする")
     void replacesSyncer() {
-      var firstSynced = new ArrayList<Feature>();
-      var secondSynced = new ArrayList<Feature>();
+      var firstSynced = new ArrayList<Flag>();
+      var secondSynced = new ArrayList<Flag>();
 
       Config.setSyncer(firstSynced::add);
       Config.setSyncer(secondSynced::add);
 
-      Config.sync(Feature.LUMBERJACK);
+      Config.sync(Feature.LUMBERJACK.CHOP);
 
       assertThat(firstSynced).isEmpty();
-      assertThat(secondSynced).containsExactly(Feature.LUMBERJACK);
+      assertThat(secondSynced).containsExactly(Feature.LUMBERJACK.CHOP);
     }
   }
 
@@ -214,15 +225,15 @@ class ConfigTest {
     @DisplayName("同期先が設定されている場合")
     class Syncer {
       @Test
-      @DisplayName("同期対象のFeatureを渡す")
-      void passesFeature() {
-        var synced = new AtomicReference<Feature>();
+      @DisplayName("同期対象のFlagを渡す")
+      void passesSetting() {
+        var synced = new AtomicReference<Flag>();
 
         Config.setSyncer(synced::set);
 
-        Config.sync(Feature.LUMBERJACK);
+        Config.sync(Feature.LUMBERJACK.CHOP);
 
-        assertThat(synced.get()).isEqualTo(Feature.LUMBERJACK);
+        assertThat(synced.get()).isEqualTo(Feature.LUMBERJACK.CHOP);
       }
     }
   }
@@ -234,15 +245,15 @@ class ConfigTest {
     @DisplayName("同期先が設定されている場合")
     class Syncer {
       @Test
-      @DisplayName("すべてのFeatureを渡す")
-      void passesAllFeatures() {
-        var synced = new ArrayList<Feature>();
+      @DisplayName("すべてのFlagを渡す")
+      void passesAllFlags() {
+        var synced = new ArrayList<Flag>();
 
         Config.setSyncer(synced::add);
 
         Config.syncAll();
 
-        assertThat(synced).containsExactly(Feature.values());
+        assertThat(synced).containsExactly(Flag.values());
       }
     }
   }

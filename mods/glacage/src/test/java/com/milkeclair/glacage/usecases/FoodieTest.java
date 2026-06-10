@@ -5,8 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.verify;
 
-import com.milkeclair.glacage.config.Feature;
-import com.milkeclair.glacage.config.Features;
+import com.milkeclair.glacage.config.feature.Feature;
 import com.milkeclair.glacage.usecases.foodie.Saturation;
 import java.util.ArrayList;
 import net.minecraft.client.DeltaTracker;
@@ -23,7 +22,7 @@ import org.junit.jupiter.api.Test;
 class FoodieTest {
   @AfterEach
   void reset() {
-    Features.clear();
+    Feature.clear();
   }
 
   @Nested
@@ -48,14 +47,14 @@ class FoodieTest {
   class RenderSaturation {
     @Nested
     @DisplayName("機能が有効の場合")
-    class EnabledFeature {
+    class EnabledSetting {
       @Test
       @DisplayName("Saturationに描画を委譲する")
       void delegatesRenderingToSaturation() {
         var guiGraphics = mock(GuiGraphics.class);
         var deltaTracker = mock(DeltaTracker.class);
 
-        Features.forceEnable(Feature.FOODIE);
+        Feature.forceEnable(Feature.FOODIE.SATURATION);
 
         try (var saturations = mockConstruction(Saturation.class)) {
           new Foodie().renderSaturation(guiGraphics, deltaTracker);
@@ -69,14 +68,14 @@ class FoodieTest {
 
     @Nested
     @DisplayName("機能が無効の場合")
-    class DisabledFeature {
+    class DisabledSetting {
       @Test
       @DisplayName("Saturationに描画を委譲しない")
       void doesNotDelegateRenderingToSaturation() {
         var guiGraphics = mock(GuiGraphics.class);
         var deltaTracker = mock(DeltaTracker.class);
 
-        Features.forceDisable(Feature.FOODIE);
+        Feature.forceDisable(Feature.FOODIE.SATURATION);
 
         try (var saturations = mockConstruction(Saturation.class)) {
           new Foodie().renderSaturation(guiGraphics, deltaTracker);
