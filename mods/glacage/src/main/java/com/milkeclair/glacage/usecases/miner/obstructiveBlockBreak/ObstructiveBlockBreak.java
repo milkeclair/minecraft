@@ -32,8 +32,9 @@ public class ObstructiveBlockBreak {
 
     var level = player.level();
     var baseBlock = event.getState().getBlock();
-    var blocks = new BlockCollection(level, event.getPos().immutable(), player.getDirection(), baseBlock)
-        .call();
+    var blocks =
+        new BlockCollection(level, event.getPos().immutable(), player.getDirection(), baseBlock)
+            .call();
     if (blocks.isEmpty()) {
       return Optional.empty();
     }
