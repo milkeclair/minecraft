@@ -10,7 +10,7 @@ public class FastClimb {
   /* 昇降を始める視線角度。 */
   public static final float CLIMB_PITCH_THRESHOLD = 45;
   /* 1tickあたりの昇降速度。 */
-  public static final double CLIMB_SPEED = 1;
+  public static final double CLIMB_SPEED = 0.5;
 
   private final Player player;
 
@@ -27,7 +27,8 @@ public class FastClimb {
     switch (new Sight(player.getXRot()).tilt(CLIMB_PITCH_THRESHOLD)) {
       case UP -> climb(CLIMB_SPEED);
       case DOWN -> climb(-CLIMB_SPEED);
-      case CENTER -> {}
+      case CENTER -> {
+      }
     }
   }
 
