@@ -1,5 +1,6 @@
 package com.milkeclair.glacage.actions.delayedBreak;
 
+import com.milkeclair.glacage.actions.blockBreak.BlockBreak;
 import java.util.LinkedHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -34,17 +35,7 @@ public class DelayedBreak {
 
   /** 各tickの処理。 */
   public void tick() {
-    for (var pos : blocks.nextBatch()) {
-      if (level.isEmptyBlock(pos)) {
-        continue;
-      }
-
-      if (durabilityBlocks.contains(pos)) {
-        player.gameMode.destroyBlock(pos);
-      } else {
-        level.destroyBlock(pos, true, player);
-      }
-    }
+    new BlockBreak(player, level, blocks.nextBatch(), durabilityBlocks).call();
   }
 
   /** queueが残っていないことの判定。 */

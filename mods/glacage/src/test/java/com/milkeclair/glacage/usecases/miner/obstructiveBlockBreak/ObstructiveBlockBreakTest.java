@@ -4,11 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.iterable;
 import static org.mockito.Mockito.mockConstruction;
 
-import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
+import com.milkeclair.glacage.actions.blockBreak.BlockBreak;
 import com.milkeclair.glacage.helpers.FakeLevel;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,7 +49,11 @@ class ObstructiveBlockBreakTest {
         var event = level.breakEvent(brokePos, player.serverPlayer());
         event.setCanceled(true);
 
-        assertThat(new ObstructiveBlockBreak(event).call()).isEmpty();
+        try (var mockedBlockBreaks = mockConstruction(BlockBreak.class)) {
+          new ObstructiveBlockBreak(event).call();
+
+          assertThat(mockedBlockBreaks.constructed()).isEmpty();
+        }
       }
     }
 
@@ -65,7 +68,11 @@ class ObstructiveBlockBreakTest {
         level.setBlock(brokePos, Blocks.GRAVEL.defaultBlockState());
         var event = level.breakEvent(brokePos, (Player) null);
 
-        assertThat(new ObstructiveBlockBreak(event).call()).isEmpty();
+        try (var mockedBlockBreaks = mockConstruction(BlockBreak.class)) {
+          new ObstructiveBlockBreak(event).call();
+
+          assertThat(mockedBlockBreaks.constructed()).isEmpty();
+        }
       }
     }
 
@@ -86,9 +93,11 @@ class ObstructiveBlockBreakTest {
         level.setBlock(brokePos, Blocks.GRAVEL.defaultBlockState());
         level.setBlock(brokePos.north(), Blocks.GRAVEL.defaultBlockState());
 
-        assertThat(
-                new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call())
-            .isEmpty();
+        try (var mockedBlockBreaks = mockConstruction(BlockBreak.class)) {
+          new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
+
+          assertThat(mockedBlockBreaks.constructed()).isEmpty();
+        }
       }
     }
 
@@ -113,9 +122,11 @@ class ObstructiveBlockBreakTest {
         level.setBlock(new BlockPos(0, 9, 0), Blocks.DIRT.defaultBlockState());
         level.setBlock(brokePos.north(), Blocks.DIRT.defaultBlockState());
 
-        assertThat(
-                new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call())
-            .isEmpty();
+        try (var mockedBlockBreaks = mockConstruction(BlockBreak.class)) {
+          new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
+
+          assertThat(mockedBlockBreaks.constructed()).isEmpty();
+        }
       }
     }
 
@@ -130,9 +141,11 @@ class ObstructiveBlockBreakTest {
         var brokePos = new BlockPos(0, 10, 0);
         level.setBlock(brokePos, Blocks.STONE.defaultBlockState());
 
-        assertThat(
-                new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call())
-            .isEmpty();
+        try (var mockedBlockBreaks = mockConstruction(BlockBreak.class)) {
+          new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
+
+          assertThat(mockedBlockBreaks.constructed()).isEmpty();
+        }
       }
     }
 
@@ -152,9 +165,11 @@ class ObstructiveBlockBreakTest {
         level.setHeight(0, 0, 40);
         level.setBlock(brokePos, Blocks.GRAVEL.defaultBlockState());
 
-        assertThat(
-                new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call())
-            .isEmpty();
+        try (var mockedBlockBreaks = mockConstruction(BlockBreak.class)) {
+          new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
+
+          assertThat(mockedBlockBreaks.constructed()).isEmpty();
+        }
       }
     }
 
@@ -166,9 +181,8 @@ class ObstructiveBlockBreakTest {
       BlockPos brokePos;
       BlockPos forward;
       BlockPos upward;
-      AtomicReference<List<?>> delayedBreakArguments;
-      List<DelayedBreak> delayedBreaks;
-      Optional<DelayedBreak> result;
+      AtomicReference<List<?>> blockBreakArguments;
+      List<BlockBreak> blockBreaks;
 
       @BeforeEach
       void call() {
@@ -181,42 +195,40 @@ class ObstructiveBlockBreakTest {
         brokePos = new BlockPos(0, 10, 0);
         forward = brokePos.north();
         upward = brokePos.above();
-        delayedBreakArguments = new AtomicReference<>();
+        blockBreakArguments = new AtomicReference<>();
         level.setHeight(0, 0, 40);
         level.setBlock(brokePos, Blocks.GRAVEL.defaultBlockState());
         level.setBlock(forward, Blocks.GRAVEL.defaultBlockState());
         level.setBlock(upward, Blocks.GRAVEL.defaultBlockState());
 
-        try (var mockedDelayedBreaks =
+        try (var mockedBlockBreaks =
             mockConstruction(
-                DelayedBreak.class,
-                (mock, context) -> delayedBreakArguments.set(context.arguments()))) {
-          result =
-              new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
-          delayedBreaks = List.copyOf(mockedDelayedBreaks.constructed());
+                BlockBreak.class,
+                (mock, context) -> blockBreakArguments.set(context.arguments()))) {
+          new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
+          blockBreaks = List.copyOf(mockedBlockBreaks.constructed());
         }
       }
 
       @Test
-      @DisplayName("遅延破壊を返す")
-      void returnsDelayedBreak() {
-        assertThat(result).isPresent();
-        assertThat(result.get()).isSameAs(delayedBreaks.getFirst());
+      @DisplayName("即時破壊を実行する")
+      void callsBlockBreak() {
+        assertThat(blockBreaks).hasSize(1);
       }
 
       @Test
-      @DisplayName("プレイヤーとlevelを遅延破壊に渡す")
-      void passesPlayerAndLevelToDelayedBreak() {
-        assertThat(delayedBreakArguments.get()).hasSize(4);
-        assertThat(delayedBreakArguments.get().get(0)).isSameAs(player.serverPlayer());
-        assertThat(delayedBreakArguments.get().get(1)).isSameAs(level.serverLevel());
+      @DisplayName("プレイヤーとlevelを即時破壊に渡す")
+      void passesPlayerAndLevelToBlockBreak() {
+        assertThat(blockBreakArguments.get()).hasSize(4);
+        assertThat(blockBreakArguments.get().get(0)).isSameAs(player.serverPlayer());
+        assertThat(blockBreakArguments.get().get(1)).isSameAs(level.serverLevel());
       }
 
       @Test
-      @DisplayName("追加で壊す砂利を遅延破壊に渡す")
-      void passesAdditionalGravelToDelayedBreak() {
-        assertThat(delayedBreakArguments.get()).hasSize(4);
-        assertThat(delayedBreakArguments.get().get(2))
+      @DisplayName("追加で壊す砂利を即時破壊に渡す")
+      void passesAdditionalGravelToBlockBreak() {
+        assertThat(blockBreakArguments.get()).hasSize(4);
+        assertThat(blockBreakArguments.get().get(2))
             .asInstanceOf(iterable(BlockPos.class))
             .containsExactly(forward, upward);
       }
@@ -224,8 +236,8 @@ class ObstructiveBlockBreakTest {
       @Test
       @DisplayName("追加で壊す砂利を耐久対象として渡す")
       void passesAdditionalGravelAsDurabilityBlocks() {
-        assertThat(delayedBreakArguments.get()).hasSize(4);
-        assertThat(delayedBreakArguments.get().get(3))
+        assertThat(blockBreakArguments.get()).hasSize(4);
+        assertThat(blockBreakArguments.get().get(3))
             .asInstanceOf(iterable(BlockPos.class))
             .containsExactly(forward, upward);
       }
@@ -235,8 +247,8 @@ class ObstructiveBlockBreakTest {
     @DisplayName("土を追加で壊せる場合")
     class BreakableDirt {
       @Test
-      @DisplayName("遅延破壊を返す")
-      void returnsDelayedBreak() {
+      @DisplayName("即時破壊を実行する")
+      void callsBlockBreak() {
         var level = new FakeLevel();
         var player =
             new FakePlayer()
@@ -248,11 +260,10 @@ class ObstructiveBlockBreakTest {
         level.setBlock(brokePos, Blocks.DIRT.defaultBlockState());
         level.setBlock(brokePos.north(), Blocks.DIRT.defaultBlockState());
 
-        try (var mockedDelayedBreaks = mockConstruction(DelayedBreak.class)) {
-          var result =
-              new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
+        try (var mockedBlockBreaks = mockConstruction(BlockBreak.class)) {
+          new ObstructiveBlockBreak(level.breakEvent(brokePos, player.serverPlayer())).call();
 
-          assertThat(result).contains(mockedDelayedBreaks.constructed().getFirst());
+          assertThat(mockedBlockBreaks.constructed()).hasSize(1);
         }
       }
     }
