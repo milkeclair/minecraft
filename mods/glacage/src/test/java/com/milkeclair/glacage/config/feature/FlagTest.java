@@ -47,6 +47,8 @@ class FlagTest {
         assertThat(Flag.fromKey("miner.enabled")).isEqualTo(Feature.MINER);
         assertThat(Flag.fromKey("miner.obstructive_block_break"))
             .isEqualTo(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK);
+        assertThat(Flag.fromKey("mobility.enabled")).isEqualTo(Feature.MOBILITY);
+        assertThat(Flag.fromKey("mobility.fast_climb")).isEqualTo(Feature.MOBILITY.FAST_CLIMB);
       }
     }
 
@@ -72,6 +74,7 @@ class FlagTest {
       assertThat(Flag.fromGroup(Group.LUMBERJACK)).isEqualTo(Feature.LUMBERJACK);
       assertThat(Flag.fromGroup(Group.FOODIE)).isEqualTo(Feature.FOODIE);
       assertThat(Flag.fromGroup(Group.MINER)).isEqualTo(Feature.MINER);
+      assertThat(Flag.fromGroup(Group.MOBILITY)).isEqualTo(Feature.MOBILITY);
     }
   }
 
@@ -87,6 +90,8 @@ class FlagTest {
           .containsExactly(Feature.FOODIE, Feature.FOODIE.SATURATION);
       assertThat(Flag.forGroup(Group.MINER))
           .containsExactly(Feature.MINER, Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK);
+      assertThat(Flag.forGroup(Group.MOBILITY))
+          .containsExactly(Feature.MOBILITY, Feature.MOBILITY.FAST_CLIMB);
     }
   }
 
@@ -103,7 +108,9 @@ class FlagTest {
               Feature.FOODIE,
               Feature.FOODIE.SATURATION,
               Feature.MINER,
-              Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK);
+              Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK,
+              Feature.MOBILITY,
+              Feature.MOBILITY.FAST_CLIMB);
     }
   }
 
@@ -119,6 +126,8 @@ class FlagTest {
       assertThat(Feature.FOODIE.SATURATION.group()).isEqualTo(Group.FOODIE);
       assertThat(Feature.MINER.group()).isEqualTo(Group.MINER);
       assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.group()).isEqualTo(Group.MINER);
+      assertThat(Feature.MOBILITY.group()).isEqualTo(Group.MOBILITY);
+      assertThat(Feature.MOBILITY.FAST_CLIMB.group()).isEqualTo(Group.MOBILITY);
     }
   }
 
@@ -135,6 +144,8 @@ class FlagTest {
       assertThat(Feature.MINER.key()).isEqualTo("miner.enabled");
       assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.key())
           .isEqualTo("miner.obstructive_block_break");
+      assertThat(Feature.MOBILITY.key()).isEqualTo("mobility.enabled");
+      assertThat(Feature.MOBILITY.FAST_CLIMB.key()).isEqualTo("mobility.fast_climb");
     }
   }
 
@@ -151,6 +162,8 @@ class FlagTest {
       assertThat(Feature.MINER.configKey()).isEqualTo("enabled");
       assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.configKey())
           .isEqualTo("obstructive_block_break");
+      assertThat(Feature.MOBILITY.configKey()).isEqualTo("enabled");
+      assertThat(Feature.MOBILITY.FAST_CLIMB.configKey()).isEqualTo("fast_climb");
     }
   }
 
@@ -170,6 +183,9 @@ class FlagTest {
       assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.comment())
           .isEqualTo(
               "Break connected blocks that obstruct mining forward and upward while underground.");
+      assertThat(Feature.MOBILITY.comment()).isEqualTo("Mobility related");
+      assertThat(Feature.MOBILITY.FAST_CLIMB.comment())
+          .isEqualTo("Climb faster on climbable blocks.");
     }
   }
 
@@ -185,6 +201,8 @@ class FlagTest {
       assertThat(Feature.FOODIE.SATURATION.defaultEnabled()).isTrue();
       assertThat(Feature.MINER.defaultEnabled()).isTrue();
       assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.defaultEnabled()).isTrue();
+      assertThat(Feature.MOBILITY.defaultEnabled()).isTrue();
+      assertThat(Feature.MOBILITY.FAST_CLIMB.defaultEnabled()).isTrue();
     }
   }
 
@@ -206,6 +224,10 @@ class FlagTest {
           .isEqualTo("glacage.configuration.features.miner.enabled");
       assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.translationKey())
           .isEqualTo("glacage.configuration.features.miner.obstructive_block_break");
+      assertThat(Feature.MOBILITY.translationKey())
+          .isEqualTo("glacage.configuration.features.mobility.enabled");
+      assertThat(Feature.MOBILITY.FAST_CLIMB.translationKey())
+          .isEqualTo("glacage.configuration.features.mobility.fast_climb");
     }
   }
 
@@ -218,6 +240,7 @@ class FlagTest {
       assertThat(Feature.LUMBERJACK.parent()).isEmpty();
       assertThat(Feature.FOODIE.parent()).isEmpty();
       assertThat(Feature.MINER.parent()).isEmpty();
+      assertThat(Feature.MOBILITY.parent()).isEmpty();
     }
 
     @Test
@@ -226,6 +249,7 @@ class FlagTest {
       assertThat(Feature.LUMBERJACK.CHOP.parent()).contains(Feature.LUMBERJACK);
       assertThat(Feature.FOODIE.SATURATION.parent()).contains(Feature.FOODIE);
       assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.parent()).contains(Feature.MINER);
+      assertThat(Feature.MOBILITY.FAST_CLIMB.parent()).contains(Feature.MOBILITY);
     }
   }
 

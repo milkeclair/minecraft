@@ -17,6 +17,7 @@ class GroupTest {
       assertThat(Group.LUMBERJACK.key()).isEqualTo("lumberjack");
       assertThat(Group.FOODIE.key()).isEqualTo("foodie");
       assertThat(Group.MINER.key()).isEqualTo("miner");
+      assertThat(Group.MOBILITY.key()).isEqualTo("mobility");
     }
   }
 
@@ -30,6 +31,8 @@ class GroupTest {
           .isEqualTo("glacage.configuration.features.lumberjack");
       assertThat(Group.FOODIE.translationKey()).isEqualTo("glacage.configuration.features.foodie");
       assertThat(Group.MINER.translationKey()).isEqualTo("glacage.configuration.features.miner");
+      assertThat(Group.MOBILITY.translationKey())
+          .isEqualTo("glacage.configuration.features.mobility");
     }
   }
 }

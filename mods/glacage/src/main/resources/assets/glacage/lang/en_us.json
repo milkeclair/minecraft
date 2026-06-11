@@ -25,5 +25,11 @@
   "glacage.configuration.features.miner.enabled": "Enabled",
   "glacage.configuration.features.miner.enabled.tooltip": "Enable Miner features.",
   "glacage.configuration.features.miner.obstructive_block_break": "Obstructive Block Break",
-  "glacage.configuration.features.miner.obstructive_block_break.tooltip": "Break connected blocks that obstruct mining while underground."
+  "glacage.configuration.features.miner.obstructive_block_break.tooltip": "Break connected blocks that obstruct mining while underground.",
+  "glacage.configuration.features.mobility": "Mobility",
+  "glacage.configuration.features.mobility.tooltip": "Mobility related",
+  "glacage.configuration.features.mobility.enabled": "Enabled",
+  "glacage.configuration.features.mobility.enabled.tooltip": "Enable Mobility features.",
+  "glacage.configuration.features.mobility.fast_climb": "Fast Climb",
+  "glacage.configuration.features.mobility.fast_climb.tooltip": "Climb faster on climbable blocks."
 }

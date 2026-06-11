@@ -9,7 +9,10 @@ public enum Group {
   FOODIE("foodie"),
 
   /* 採掘機能。 */
-  MINER("miner");
+  MINER("miner"),
+
+  /* 移動機能。 */
+  MOBILITY("mobility");
 
   private final String key;
 

@@ -25,5 +25,11 @@
   "glacage.configuration.features.miner.enabled": "有効",
   "glacage.configuration.features.miner.enabled.tooltip": "採掘機能を有効にします。",
   "glacage.configuration.features.miner.obstructive_block_break": "採掘阻害ブロックの破壊",
-  "glacage.configuration.features.miner.obstructive_block_break.tooltip": "地下で採掘を阻害するブロックを一括で壊します。"
+  "glacage.configuration.features.miner.obstructive_block_break.tooltip": "地下で採掘を阻害するブロックを一括で壊します。",
+  "glacage.configuration.features.mobility": "移動",
+  "glacage.configuration.features.mobility.tooltip": "移動関連",
+  "glacage.configuration.features.mobility.enabled": "有効",
+  "glacage.configuration.features.mobility.enabled.tooltip": "移動機能を有効にします。",
+  "glacage.configuration.features.mobility.fast_climb": "高速昇降",
+  "glacage.configuration.features.mobility.fast_climb.tooltip": "登れるブロックでの昇降を速くします。"
 }

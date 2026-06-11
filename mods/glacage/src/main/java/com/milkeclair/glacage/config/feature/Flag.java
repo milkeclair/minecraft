@@ -41,6 +41,7 @@ public class Flag {
       case LUMBERJACK -> Feature.LUMBERJACK;
       case FOODIE -> Feature.FOODIE;
       case MINER -> Feature.MINER;
+      case MOBILITY -> Feature.MOBILITY;
     };
   }
 
@@ -62,7 +63,9 @@ public class Flag {
       Feature.FOODIE,
       Feature.FOODIE.SATURATION,
       Feature.MINER,
-      Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK
+      Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK,
+      Feature.MOBILITY,
+      Feature.MOBILITY.FAST_CLIMB
     };
   }
 
