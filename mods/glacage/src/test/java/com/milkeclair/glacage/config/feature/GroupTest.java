@@ -16,6 +16,7 @@ class GroupTest {
     void returnsKey() {
       assertThat(Group.LUMBERJACK.key()).isEqualTo("lumberjack");
       assertThat(Group.FOODIE.key()).isEqualTo("foodie");
+      assertThat(Group.MINER.key()).isEqualTo("miner");
     }
   }
 
@@ -28,6 +29,7 @@ class GroupTest {
       assertThat(Group.LUMBERJACK.translationKey())
           .isEqualTo("glacage.configuration.features.lumberjack");
       assertThat(Group.FOODIE.translationKey()).isEqualTo("glacage.configuration.features.foodie");
+      assertThat(Group.MINER.translationKey()).isEqualTo("glacage.configuration.features.miner");
     }
   }
 }

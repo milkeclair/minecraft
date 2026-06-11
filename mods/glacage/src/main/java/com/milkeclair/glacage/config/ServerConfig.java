@@ -3,28 +3,31 @@ package com.milkeclair.glacage.config;
 import com.milkeclair.glacage.config.feature.Flag;
 import com.milkeclair.glacage.config.feature.Group;
 import java.util.HashMap;
-import java.util.function.Consumer;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-/* Modの設定。 */
-public class Config {
-  // Neoforgeの設定。
+/* サーバー側のMod設定。 */
+public class ServerConfig {
+  /* Neoforgeの設定。 */
   public static final ModConfigSpec SPEC;
 
   private static final HashMap<Flag, ModConfigSpec.BooleanValue> ENABLED_VALUES = new HashMap<>();
-  private static Consumer<Flag> syncer = flag -> {};
+  private static final ModConfigSpec.EnumValue<Priority> PRIORITY_VALUE;
 
   static {
     var builder = new ModConfigSpec.Builder();
 
     builder
-        .comment("Config of glacage features")
+        .comment("Server config of glacage features")
         .translation("glacage.configuration.features")
         .push("features");
+
+    PRIORITY_VALUE =
+        builder
+            .comment("Choose whether client or server feature settings take priority.")
+            .translation("glacage.configuration.features.priority")
+            .defineEnum("priority", Priority.CLIENT);
 
     for (var group : Group.values()) {
       var groupFlag = Flag.fromGroup(group);
@@ -48,13 +51,24 @@ public class Config {
   }
 
   /*
-   * バスへの登録。
-   * Specはクライアント側の設定として追加する。
+   * Modの設定にSpecを登録する。
    */
-  public static void register(ModContainer container, IEventBus modEventBus) {
-    container.registerConfig(ModConfig.Type.CLIENT, SPEC);
-    modEventBus.addListener(ModConfigEvent.Loading.class, Config::load);
-    modEventBus.addListener(ModConfigEvent.Reloading.class, Config::load);
+  public static void register(ModContainer container) {
+    container.registerConfig(ModConfig.Type.SERVER, SPEC);
+  }
+
+  /* サーバーかクライアントか、どちらの設定を優先するか。 */
+  public static Priority priority() {
+    if (!SPEC.isLoaded()) {
+      return Priority.CLIENT;
+    }
+
+    return PRIORITY_VALUE.get();
+  }
+
+  /* 優先度の設定。 */
+  public static void setPriority(Priority priority) {
+    PRIORITY_VALUE.set(priority);
   }
 
   /* 有効かどうかの判定。 */
@@ -70,30 +84,5 @@ public class Config {
   /* 有効、無効の切り替え。 */
   public static void setEnabled(Flag flag, boolean enabled) {
     ENABLED_VALUES.get(flag).set(enabled);
-  }
-
-  /* 設定の同期関数。 */
-  public static void setSyncer(Consumer<Flag> syncer) {
-    Config.syncer = syncer;
-  }
-
-  /* 同期。syncerにflagをyieldする。 */
-  public static void sync(Flag flag) {
-    syncer.accept(flag);
-  }
-
-  /* 全フラグの同期。 */
-  public static void syncAll() {
-    for (var flag : Flag.values()) {
-      sync(flag);
-    }
-  }
-
-  private static void load(ModConfigEvent event) {
-    if (event.getConfig().getSpec() != SPEC) {
-      return;
-    }
-
-    syncAll();
   }
 }

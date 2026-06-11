@@ -2,8 +2,12 @@
   "glacage.configuration.title": "Configuration",
   "glacage.configuration.section.glacage.client.toml": "Client Settings",
   "glacage.configuration.section.glacage.client.toml.title": "Glacage Configuration",
+  "glacage.configuration.section.glacage.server.toml": "Server Settings",
+  "glacage.configuration.section.glacage.server.toml.title": "Glacage Server Configuration",
   "glacage.configuration.features": "Features",
   "glacage.configuration.features.button": "Edit",
+  "glacage.configuration.features.priority": "Priority",
+  "glacage.configuration.features.priority.tooltip": "Choose whether client or server feature settings take priority.",
   "glacage.configuration.features.foodie": "Foodie",
   "glacage.configuration.features.foodie.tooltip": "Food related",
   "glacage.configuration.features.foodie.enabled": "Enabled",
@@ -15,5 +19,11 @@
   "glacage.configuration.features.lumberjack.chop": "Chop",
   "glacage.configuration.features.lumberjack.chop.tooltip": "Break a whole tree when chopping a log.",
   "glacage.configuration.features.lumberjack.enabled": "Enabled",
-  "glacage.configuration.features.lumberjack.enabled.tooltip": "Enable Lumberjack features."
+  "glacage.configuration.features.lumberjack.enabled.tooltip": "Enable Lumberjack features.",
+  "glacage.configuration.features.miner": "Miner",
+  "glacage.configuration.features.miner.tooltip": "Mining related",
+  "glacage.configuration.features.miner.enabled": "Enabled",
+  "glacage.configuration.features.miner.enabled.tooltip": "Enable Miner features.",
+  "glacage.configuration.features.miner.obstructive_block_break": "Obstructive Block Break",
+  "glacage.configuration.features.miner.obstructive_block_break.tooltip": "Break connected blocks that obstruct mining while underground."
 }

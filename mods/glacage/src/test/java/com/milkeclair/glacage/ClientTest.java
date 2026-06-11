@@ -8,7 +8,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
 import com.milkeclair.glacage.config.feature.Feature;
 import com.milkeclair.glacage.usecases.foodie.Foodie;
 import net.neoforged.api.distmarker.Dist;
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 class ClientTest {
   @AfterEach
   void reset() {
-    Config.setSyncer(flag -> {});
+    ClientConfig.setSyncer(flag -> {});
   }
 
   @Nested
@@ -79,7 +79,7 @@ class ClientTest {
 
         new Client(modEventBus, container);
 
-        assertThatCode(() -> Config.sync(Feature.LUMBERJACK)).doesNotThrowAnyException();
+        assertThatCode(() -> ClientConfig.sync(Feature.LUMBERJACK)).doesNotThrowAnyException();
       }
     }
   }

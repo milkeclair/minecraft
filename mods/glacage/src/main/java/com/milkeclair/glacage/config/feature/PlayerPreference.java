@@ -1,6 +1,6 @@
 package com.milkeclair.glacage.config.feature;
 
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
 import java.util.HashMap;
 import java.util.UUID;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,10 +13,10 @@ public class PlayerPreference {
   /* 有効かどうかの判定。 */
   public static boolean enabled(Flag flag, Player player) {
     if (player instanceof ServerPlayer serverPlayer) {
-      return enabledPlayers(flag).getOrDefault(serverPlayer.getUUID(), Config.enabled(flag));
+      return enabledPlayers(flag).getOrDefault(serverPlayer.getUUID(), ClientConfig.enabled(flag));
     }
 
-    return Config.enabled(flag);
+    return ClientConfig.enabled(flag);
   }
 
   /* 有効、無効の設定。 */

@@ -1,6 +1,6 @@
 package com.milkeclair.glacage;
 
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
 import com.milkeclair.glacage.config.feature.Flag;
 import com.milkeclair.glacage.config.feature.Payload;
 import com.milkeclair.glacage.usecases.foodie.Foodie;
@@ -19,7 +19,7 @@ import net.neoforged.neoforge.common.NeoForge;
 @Mod(value = Glacage.MOD_ID, dist = Dist.CLIENT)
 public class Client {
   public Client(IEventBus modEventBus, ModContainer container) {
-    Config.setSyncer(Client::syncFlag);
+    ClientConfig.setSyncer(Client::syncFlag);
     modEventBus.register(new Foodie());
     NeoForge.EVENT_BUS.addListener(Client::syncFlagsOnLogin);
 
@@ -30,7 +30,7 @@ public class Client {
   }
 
   private static void syncFlagsOnLogin(ClientPlayerNetworkEvent.LoggingIn event) {
-    Config.syncAll();
+    ClientConfig.syncAll();
   }
 
   private static void syncFlag(Flag flag) {
@@ -39,6 +39,6 @@ public class Client {
       return;
     }
 
-    ClientPacketDistributor.sendToServer(new Payload(flag, Config.enabled(flag)));
+    ClientPacketDistributor.sendToServer(new Payload(flag, ClientConfig.enabled(flag)));
   }
 }

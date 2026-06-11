@@ -1,7 +1,8 @@
 package com.milkeclair.glacage;
 
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
 import com.milkeclair.glacage.config.Network;
+import com.milkeclair.glacage.config.ServerConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -17,7 +18,8 @@ public class Glacage {
   private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
   public Glacage(IEventBus modEventBus, ModContainer container) {
-    Config.register(container, modEventBus);
+    ClientConfig.register(container, modEventBus);
+    ServerConfig.register(container);
     modEventBus.addListener(RegisterPayloadHandlersEvent.class, Network::register);
     new EventRegistration().call();
 

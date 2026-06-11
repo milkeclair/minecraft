@@ -3,10 +3,9 @@ package com.milkeclair.glacage.usecases.lumberjack.chop;
 import com.milkeclair.glacage.actions.search.breadthFirst.BreadthFirst;
 import com.milkeclair.glacage.actions.search.breadthFirst.Node;
 import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
-import com.milkeclair.glacage.models.Log;
+import com.milkeclair.glacage.models.block.SolidBlock;
 import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -30,17 +29,14 @@ public class LogCollection {
 
   /** 原木を探索する。 破壊されたブロックの位置からBFSで探索していき、収集した原木を返す。 */
   public LinkedHashSet<BlockPos> call() {
-    var nodes =
-        new BreadthFirst<>(
-                List.of(new Node<>(brokeLogPos)),
-                this::isInsideSearchArea,
-                this::isCollectableLog,
-                this::neighbors,
-                MAX_LOG_BLOCKS,
-                OverflowPolicy.EMPTY)
-            .collect();
-
-    return positions(nodes);
+    return new BreadthFirst<>(
+            List.of(new Node<>(brokeLogPos)),
+            this::isInsideSearchArea,
+            this::isCollectableLog,
+            this::neighbors,
+            MAX_LOG_BLOCKS,
+            OverflowPolicy.EMPTY)
+        .collectValues();
   }
 
   private ArrayList<BlockPos> neighbors(Node<BlockPos> node) {
@@ -58,16 +54,8 @@ public class LogCollection {
   }
 
   private boolean isCollectableLog(Node<BlockPos> node) {
-    return new Log(level.getBlockState(node.value())).matches(baseBlock);
-  }
+    var block = new SolidBlock(level.getBlockState(node.value()));
 
-  private LinkedHashSet<BlockPos> positions(Collection<Node<BlockPos>> nodes) {
-    var positions = new LinkedHashSet<BlockPos>();
-
-    for (var node : nodes) {
-      positions.add(node.value());
-    }
-
-    return positions;
+    return block.isLog() && block.isSameAs(baseBlock);
   }
 }

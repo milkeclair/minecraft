@@ -40,6 +40,7 @@ public class Flag {
     return switch (group) {
       case LUMBERJACK -> Feature.LUMBERJACK;
       case FOODIE -> Feature.FOODIE;
+      case MINER -> Feature.MINER;
     };
   }
 
@@ -56,7 +57,12 @@ public class Flag {
   /* すべてのFlag。 */
   public static Flag[] values() {
     return new Flag[] {
-      Feature.LUMBERJACK, Feature.LUMBERJACK.CHOP, Feature.FOODIE, Feature.FOODIE.SATURATION
+      Feature.LUMBERJACK,
+      Feature.LUMBERJACK.CHOP,
+      Feature.FOODIE,
+      Feature.FOODIE.SATURATION,
+      Feature.MINER,
+      Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK
     };
   }
 

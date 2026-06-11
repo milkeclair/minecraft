@@ -2,7 +2,9 @@ package com.milkeclair.glacage.config.feature;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
+import com.milkeclair.glacage.config.Priority;
+import com.milkeclair.glacage.config.ServerConfig;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import java.util.UUID;
@@ -23,8 +25,10 @@ class FeatureTest {
   void reset() {
     Feature.clear();
     PlayerPreference.clear();
+    ServerConfig.setPriority(Priority.CLIENT);
     for (var flag : Flag.values()) {
-      Config.setEnabled(flag, flag.defaultEnabled());
+      ClientConfig.setEnabled(flag, flag.defaultEnabled());
+      ServerConfig.setEnabled(flag, flag.defaultEnabled());
     }
   }
 
@@ -38,7 +42,7 @@ class FeatureTest {
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
       Feature.forceEnable(Feature.LUMBERJACK);
-      Config.setEnabled(Feature.LUMBERJACK, false);
+      ClientConfig.setEnabled(Feature.LUMBERJACK, false);
       PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
 
       assertThat(Feature.enabled(Feature.LUMBERJACK, player.serverPlayer())).isTrue();
@@ -51,7 +55,7 @@ class FeatureTest {
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
       Feature.forceEnable(Feature.LUMBERJACK.CHOP);
-      Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
+      ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, false);
       PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), false);
 
       assertThat(Feature.enabled(Feature.LUMBERJACK.CHOP, player.serverPlayer())).isTrue();
@@ -68,7 +72,7 @@ class FeatureTest {
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
       Feature.forceDisable(Feature.LUMBERJACK);
-      Config.setEnabled(Feature.LUMBERJACK, true);
+      ClientConfig.setEnabled(Feature.LUMBERJACK, true);
       PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
 
       assertThat(Feature.enabled(Feature.LUMBERJACK, player.serverPlayer())).isFalse();
@@ -81,7 +85,7 @@ class FeatureTest {
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
       Feature.forceDisable(Feature.LUMBERJACK.CHOP);
-      Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+      ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
       PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), true);
 
       assertThat(Feature.enabled(Feature.LUMBERJACK.CHOP, player.serverPlayer())).isFalse();
@@ -97,7 +101,7 @@ class FeatureTest {
       var player =
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-      Config.setEnabled(Feature.LUMBERJACK, true);
+      ClientConfig.setEnabled(Feature.LUMBERJACK, true);
       PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
       Feature.forceEnable(Feature.LUMBERJACK);
 
@@ -112,7 +116,7 @@ class FeatureTest {
       var player =
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-      Config.setEnabled(Feature.LUMBERJACK, false);
+      ClientConfig.setEnabled(Feature.LUMBERJACK, false);
       PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
       Feature.forceDisable(Feature.LUMBERJACK);
 
@@ -128,7 +132,7 @@ class FeatureTest {
     @Test
     @DisplayName("開発者設定をすべて解除する")
     void clearsDeveloperOverrides() {
-      Config.setEnabled(Feature.LUMBERJACK, true);
+      ClientConfig.setEnabled(Feature.LUMBERJACK, true);
       Feature.forceDisable(Feature.LUMBERJACK);
 
       Feature.clear();
@@ -147,11 +151,11 @@ class FeatureTest {
       @DisplayName("ユーザー設定を返す")
       void returnsUserSetting() {
         Feature.usePlayerPreference(Feature.LUMBERJACK);
-        Config.setEnabled(Feature.LUMBERJACK, false);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, false);
 
         assertThat(Feature.enabled(Feature.LUMBERJACK)).isFalse();
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
 
         assertThat(Feature.enabled(Feature.LUMBERJACK)).isTrue();
       }
@@ -162,7 +166,7 @@ class FeatureTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
         PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
         Feature.usePlayerPreference(Feature.LUMBERJACK);
 
@@ -172,8 +176,8 @@ class FeatureTest {
       @Test
       @DisplayName("親設定が無効の場合は子設定をfalseとして扱う")
       void returnsFalseForChildSettingWhenParentSettingIsDisabled() {
-        Config.setEnabled(Feature.LUMBERJACK, false);
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, false);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
         Feature.usePlayerPreference(Feature.LUMBERJACK);
         Feature.usePlayerPreference(Feature.LUMBERJACK.CHOP);
 
@@ -183,14 +187,78 @@ class FeatureTest {
       @Test
       @DisplayName("親設定が有効の場合は子設定を返す")
       void returnsChildSettingWhenParentSettingIsEnabled() {
-        Config.setEnabled(Feature.LUMBERJACK, true);
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, false);
         Feature.usePlayerPreference(Feature.LUMBERJACK);
         Feature.usePlayerPreference(Feature.LUMBERJACK.CHOP);
 
         assertThat(Feature.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
 
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
+
+        assertThat(Feature.enabled(Feature.LUMBERJACK.CHOP)).isTrue();
+      }
+    }
+
+    @Nested
+    @DisplayName("サーバー設定がCLIENT優先の場合")
+    class ClientPriority {
+      @Test
+      @DisplayName("プレイヤー別設定を返す")
+      void returnsPlayerSetting() {
+        var player =
+            new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+
+        ServerConfig.setPriority(Priority.CLIENT);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
+        ServerConfig.setEnabled(Feature.LUMBERJACK, false);
+        PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
+
+        assertThat(Feature.enabled(Feature.LUMBERJACK, player.serverPlayer())).isTrue();
+      }
+    }
+
+    @Nested
+    @DisplayName("サーバー設定がSERVER優先の場合")
+    class ServerPriority {
+      @Test
+      @DisplayName("サーバー設定を返す")
+      void returnsServerSetting() {
+        var player =
+            new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
+
+        ServerConfig.setPriority(Priority.SERVER);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
+        PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
+        ServerConfig.setEnabled(Feature.LUMBERJACK, false);
+
+        assertThat(Feature.enabled(Feature.LUMBERJACK, player.serverPlayer())).isFalse();
+
+        ServerConfig.setEnabled(Feature.LUMBERJACK, true);
+
+        assertThat(Feature.enabled(Feature.LUMBERJACK, player.serverPlayer())).isTrue();
+      }
+
+      @Test
+      @DisplayName("親設定が無効の場合は子設定をfalseとして扱う")
+      void returnsFalseForChildSettingWhenParentSettingIsDisabled() {
+        ServerConfig.setPriority(Priority.SERVER);
+        ServerConfig.setEnabled(Feature.LUMBERJACK, false);
+        ServerConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
+
+        assertThat(Feature.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
+      }
+
+      @Test
+      @DisplayName("親設定が有効の場合は子設定を返す")
+      void returnsChildSettingWhenParentSettingIsEnabled() {
+        ServerConfig.setPriority(Priority.SERVER);
+        ServerConfig.setEnabled(Feature.LUMBERJACK, true);
+        ServerConfig.setEnabled(Feature.LUMBERJACK.CHOP, false);
+
+        assertThat(Feature.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
+
+        ServerConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
 
         assertThat(Feature.enabled(Feature.LUMBERJACK.CHOP)).isTrue();
       }
@@ -205,7 +273,7 @@ class FeatureTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK, false);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, false);
         PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
         Feature.forceEnable(Feature.LUMBERJACK);
 
@@ -222,7 +290,7 @@ class FeatureTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
         PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
         Feature.forceDisable(Feature.LUMBERJACK);
 

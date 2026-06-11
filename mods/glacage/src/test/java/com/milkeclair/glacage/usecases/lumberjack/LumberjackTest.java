@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
 import com.milkeclair.glacage.config.feature.Feature;
 import com.milkeclair.glacage.config.feature.Flag;
 import com.milkeclair.glacage.config.feature.PlayerPreference;
@@ -42,7 +42,7 @@ class LumberjackTest {
     Feature.clear();
     PlayerPreference.clear();
     for (var flag : Flag.values()) {
-      Config.setEnabled(flag, flag.defaultEnabled());
+      ClientConfig.setEnabled(flag, flag.defaultEnabled());
     }
   }
 
@@ -170,7 +170,7 @@ class LumberjackTest {
         var lumberjack = new Lumberjack();
 
         when(event.getPlayer()).thenReturn(player.serverPlayer());
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
         PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), false);
 
         try (var mockedChops = mockConstruction(Chop.class)) {
@@ -286,7 +286,7 @@ class LumberjackTest {
 
         when(breakEvent.getPlayer()).thenReturn(player.serverPlayer());
         when(delayedBreak.player()).thenReturn(player.serverPlayer());
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
         PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), true);
 
         try (var mockedChops =

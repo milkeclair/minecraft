@@ -44,6 +44,9 @@ class FlagTest {
         assertThat(Flag.fromKey("lumberjack.chop")).isEqualTo(Feature.LUMBERJACK.CHOP);
         assertThat(Flag.fromKey("foodie.enabled")).isEqualTo(Feature.FOODIE);
         assertThat(Flag.fromKey("foodie.saturation")).isEqualTo(Feature.FOODIE.SATURATION);
+        assertThat(Flag.fromKey("miner.enabled")).isEqualTo(Feature.MINER);
+        assertThat(Flag.fromKey("miner.obstructive_block_break"))
+            .isEqualTo(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK);
       }
     }
 
@@ -68,6 +71,7 @@ class FlagTest {
     void returnsParentSetting() {
       assertThat(Flag.fromGroup(Group.LUMBERJACK)).isEqualTo(Feature.LUMBERJACK);
       assertThat(Flag.fromGroup(Group.FOODIE)).isEqualTo(Feature.FOODIE);
+      assertThat(Flag.fromGroup(Group.MINER)).isEqualTo(Feature.MINER);
     }
   }
 
@@ -81,6 +85,8 @@ class FlagTest {
           .containsExactly(Feature.LUMBERJACK, Feature.LUMBERJACK.CHOP);
       assertThat(Flag.forGroup(Group.FOODIE))
           .containsExactly(Feature.FOODIE, Feature.FOODIE.SATURATION);
+      assertThat(Flag.forGroup(Group.MINER))
+          .containsExactly(Feature.MINER, Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK);
     }
   }
 
@@ -95,7 +101,9 @@ class FlagTest {
               Feature.LUMBERJACK,
               Feature.LUMBERJACK.CHOP,
               Feature.FOODIE,
-              Feature.FOODIE.SATURATION);
+              Feature.FOODIE.SATURATION,
+              Feature.MINER,
+              Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK);
     }
   }
 
@@ -109,6 +117,8 @@ class FlagTest {
       assertThat(Feature.LUMBERJACK.CHOP.group()).isEqualTo(Group.LUMBERJACK);
       assertThat(Feature.FOODIE.group()).isEqualTo(Group.FOODIE);
       assertThat(Feature.FOODIE.SATURATION.group()).isEqualTo(Group.FOODIE);
+      assertThat(Feature.MINER.group()).isEqualTo(Group.MINER);
+      assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.group()).isEqualTo(Group.MINER);
     }
   }
 
@@ -122,6 +132,9 @@ class FlagTest {
       assertThat(Feature.LUMBERJACK.CHOP.key()).isEqualTo("lumberjack.chop");
       assertThat(Feature.FOODIE.key()).isEqualTo("foodie.enabled");
       assertThat(Feature.FOODIE.SATURATION.key()).isEqualTo("foodie.saturation");
+      assertThat(Feature.MINER.key()).isEqualTo("miner.enabled");
+      assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.key())
+          .isEqualTo("miner.obstructive_block_break");
     }
   }
 
@@ -135,6 +148,9 @@ class FlagTest {
       assertThat(Feature.LUMBERJACK.CHOP.configKey()).isEqualTo("chop");
       assertThat(Feature.FOODIE.configKey()).isEqualTo("enabled");
       assertThat(Feature.FOODIE.SATURATION.configKey()).isEqualTo("saturation");
+      assertThat(Feature.MINER.configKey()).isEqualTo("enabled");
+      assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.configKey())
+          .isEqualTo("obstructive_block_break");
     }
   }
 
@@ -150,6 +166,10 @@ class FlagTest {
       assertThat(Feature.FOODIE.comment()).isEqualTo("Food related");
       assertThat(Feature.FOODIE.SATURATION.comment())
           .isEqualTo("Show hidden saturation on the food bar.");
+      assertThat(Feature.MINER.comment()).isEqualTo("Mining related");
+      assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.comment())
+          .isEqualTo(
+              "Break connected blocks that obstruct mining forward and upward while underground.");
     }
   }
 
@@ -163,6 +183,8 @@ class FlagTest {
       assertThat(Feature.LUMBERJACK.CHOP.defaultEnabled()).isTrue();
       assertThat(Feature.FOODIE.defaultEnabled()).isTrue();
       assertThat(Feature.FOODIE.SATURATION.defaultEnabled()).isTrue();
+      assertThat(Feature.MINER.defaultEnabled()).isTrue();
+      assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.defaultEnabled()).isTrue();
     }
   }
 
@@ -180,6 +202,10 @@ class FlagTest {
           .isEqualTo("glacage.configuration.features.foodie.enabled");
       assertThat(Feature.FOODIE.SATURATION.translationKey())
           .isEqualTo("glacage.configuration.features.foodie.saturation");
+      assertThat(Feature.MINER.translationKey())
+          .isEqualTo("glacage.configuration.features.miner.enabled");
+      assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.translationKey())
+          .isEqualTo("glacage.configuration.features.miner.obstructive_block_break");
     }
   }
 
@@ -191,6 +217,7 @@ class FlagTest {
     void returnsEmptyForParentSetting() {
       assertThat(Feature.LUMBERJACK.parent()).isEmpty();
       assertThat(Feature.FOODIE.parent()).isEmpty();
+      assertThat(Feature.MINER.parent()).isEmpty();
     }
 
     @Test
@@ -198,6 +225,7 @@ class FlagTest {
     void returnsParentForChildSetting() {
       assertThat(Feature.LUMBERJACK.CHOP.parent()).contains(Feature.LUMBERJACK);
       assertThat(Feature.FOODIE.SATURATION.parent()).contains(Feature.FOODIE);
+      assertThat(Feature.MINER.OBSTRUCTIVE_BLOCK_BREAK.parent()).contains(Feature.MINER);
     }
   }
 

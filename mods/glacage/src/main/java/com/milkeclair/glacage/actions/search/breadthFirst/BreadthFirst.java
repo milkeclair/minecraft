@@ -43,6 +43,17 @@ public class BreadthFirst<T> {
     return search(node -> false).nodes();
   }
 
+  /** 値の収集。 */
+  public LinkedHashSet<T> collectValues() {
+    var values = new LinkedHashSet<T>();
+
+    for (var node : collect()) {
+      values.add(node.value());
+    }
+
+    return values;
+  }
+
   /** 経路の取得。 valueがtargetと一致するノードのルートを探す。 */
   public Optional<List<T>> routeTo(T target) {
     return routeTo(node -> Objects.equals(node.value(), target));

@@ -1,7 +1,7 @@
 package com.milkeclair.glacage.usecases.lumberjack.chop;
 
 import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
-import com.milkeclair.glacage.models.Log;
+import com.milkeclair.glacage.models.block.SolidBlock;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
@@ -29,7 +29,7 @@ public class Chop {
       return Optional.empty();
     }
 
-    if (!new Log(event.getState()).isLog()) {
+    if (!new SolidBlock(event.getState()).isLog()) {
       return Optional.empty();
     }
 

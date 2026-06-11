@@ -27,8 +27,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("Config")
-class ConfigTest {
+@DisplayName("ClientConfig")
+class ClientConfigTest {
   @BeforeEach
   void loadConfig() {
     FakeConfig.load();
@@ -37,9 +37,9 @@ class ConfigTest {
   @AfterEach
   void reset() {
     for (var flag : Flag.values()) {
-      Config.setEnabled(flag, flag.defaultEnabled());
+      ClientConfig.setEnabled(flag, flag.defaultEnabled());
     }
-    Config.setSyncer(flag -> {});
+    ClientConfig.setSyncer(flag -> {});
   }
 
   @Nested
@@ -48,23 +48,23 @@ class ConfigTest {
     @Test
     @DisplayName("Flagをfeatures配下のboolean設定として定義する")
     void definesFlagsAsBooleanConfigUnderFeatures() {
-      assertThat(Config.SPEC.getLevelComment(List.of("features")))
-          .isEqualTo("Config of glacage features");
-      assertThat(Config.SPEC.getLevelTranslationKey(List.of("features")))
+      assertThat(ClientConfig.SPEC.getLevelComment(List.of("features")))
+          .isEqualTo("Client config of glacage features");
+      assertThat(ClientConfig.SPEC.getLevelTranslationKey(List.of("features")))
           .isEqualTo("glacage.configuration.features");
 
       for (var group : Group.values()) {
         var groupFlag = Flag.fromGroup(group);
 
-        assertThat(Config.SPEC.getLevelComment(List.of("features", group.key())))
+        assertThat(ClientConfig.SPEC.getLevelComment(List.of("features", group.key())))
             .isEqualTo(groupFlag.comment());
-        assertThat(Config.SPEC.getLevelTranslationKey(List.of("features", group.key())))
+        assertThat(ClientConfig.SPEC.getLevelTranslationKey(List.of("features", group.key())))
             .isEqualTo(group.translationKey());
       }
 
       for (var flag : Flag.values()) {
         var path = List.of("features", flag.group().key(), flag.configKey());
-        var value = Config.SPEC.getSpec().get(path);
+        var value = ClientConfig.SPEC.getSpec().get(path);
 
         assertThat(value).isInstanceOf(ModConfigSpec.ValueSpec.class);
 
@@ -87,9 +87,9 @@ class ConfigTest {
       var container = mock(ModContainer.class);
       var modEventBus = mock(IEventBus.class);
 
-      Config.register(container, modEventBus);
+      ClientConfig.register(container, modEventBus);
 
-      verify(container).registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
+      verify(container).registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
       verify(modEventBus).addListener(eq(ModConfigEvent.Loading.class), any());
       verify(modEventBus).addListener(eq(ModConfigEvent.Reloading.class), any());
     }
@@ -104,10 +104,10 @@ class ConfigTest {
         var modEventBus = BusBuilder.builder().build();
         var synced = new ArrayList<Flag>();
 
-        Config.setSyncer(synced::add);
-        Config.register(container, modEventBus);
+        ClientConfig.setSyncer(synced::add);
+        ClientConfig.register(container, modEventBus);
 
-        modEventBus.post(new ModConfigEvent.Loading(modConfig(Config.SPEC)));
+        modEventBus.post(new ModConfigEvent.Loading(modConfig(ClientConfig.SPEC)));
 
         assertThat(synced).containsExactly(Flag.values());
       }
@@ -120,8 +120,8 @@ class ConfigTest {
         var synced = new ArrayList<Flag>();
         var otherSpec = new ModConfigSpec.Builder().build();
 
-        Config.setSyncer(synced::add);
-        Config.register(container, modEventBus);
+        ClientConfig.setSyncer(synced::add);
+        ClientConfig.register(container, modEventBus);
 
         modEventBus.post(new ModConfigEvent.Loading(modConfig(otherSpec)));
 
@@ -139,10 +139,10 @@ class ConfigTest {
         var modEventBus = BusBuilder.builder().build();
         var synced = new ArrayList<Flag>();
 
-        Config.setSyncer(synced::add);
-        Config.register(container, modEventBus);
+        ClientConfig.setSyncer(synced::add);
+        ClientConfig.register(container, modEventBus);
 
-        modEventBus.post(new ModConfigEvent.Reloading(modConfig(Config.SPEC)));
+        modEventBus.post(new ModConfigEvent.Reloading(modConfig(ClientConfig.SPEC)));
 
         assertThat(synced).containsExactly(Flag.values());
       }
@@ -159,7 +159,7 @@ class ConfigTest {
       @DisplayName("Flagのデフォルト値を返す")
       void returnsGroupDefaultValue() {
         for (var flag : Flag.values()) {
-          assertThat(Config.enabled(flag)).isEqualTo(flag.defaultEnabled());
+          assertThat(ClientConfig.enabled(flag)).isEqualTo(flag.defaultEnabled());
         }
       }
     }
@@ -170,9 +170,9 @@ class ConfigTest {
       @Test
       @DisplayName("更新後の値を返す")
       void returnsUpdatedValue() {
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, false);
 
-        assertThat(Config.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
+        assertThat(ClientConfig.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
       }
     }
   }
@@ -183,19 +183,19 @@ class ConfigTest {
     @Test
     @DisplayName("設定を無効にする")
     void setsConfigToDisabled() {
-      Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
+      ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, false);
 
-      assertThat(Config.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
+      assertThat(ClientConfig.enabled(Feature.LUMBERJACK.CHOP)).isFalse();
     }
 
     @Test
     @DisplayName("設定を有効にする")
     void setsConfigToEnabled() {
-      Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
+      ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, false);
 
-      Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+      ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
 
-      assertThat(Config.enabled(Feature.LUMBERJACK.CHOP)).isTrue();
+      assertThat(ClientConfig.enabled(Feature.LUMBERJACK.CHOP)).isTrue();
     }
   }
 
@@ -208,10 +208,10 @@ class ConfigTest {
       var firstSynced = new ArrayList<Flag>();
       var secondSynced = new ArrayList<Flag>();
 
-      Config.setSyncer(firstSynced::add);
-      Config.setSyncer(secondSynced::add);
+      ClientConfig.setSyncer(firstSynced::add);
+      ClientConfig.setSyncer(secondSynced::add);
 
-      Config.sync(Feature.LUMBERJACK.CHOP);
+      ClientConfig.sync(Feature.LUMBERJACK.CHOP);
 
       assertThat(firstSynced).isEmpty();
       assertThat(secondSynced).containsExactly(Feature.LUMBERJACK.CHOP);
@@ -229,9 +229,9 @@ class ConfigTest {
       void passesSetting() {
         var synced = new AtomicReference<Flag>();
 
-        Config.setSyncer(synced::set);
+        ClientConfig.setSyncer(synced::set);
 
-        Config.sync(Feature.LUMBERJACK.CHOP);
+        ClientConfig.sync(Feature.LUMBERJACK.CHOP);
 
         assertThat(synced.get()).isEqualTo(Feature.LUMBERJACK.CHOP);
       }
@@ -249,9 +249,9 @@ class ConfigTest {
       void passesAllFlags() {
         var synced = new ArrayList<Flag>();
 
-        Config.setSyncer(synced::add);
+        ClientConfig.setSyncer(synced::add);
 
-        Config.syncAll();
+        ClientConfig.syncAll();
 
         assertThat(synced).containsExactly(Flag.values());
       }

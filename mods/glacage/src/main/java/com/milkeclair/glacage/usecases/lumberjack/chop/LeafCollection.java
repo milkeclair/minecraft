@@ -3,10 +3,9 @@ package com.milkeclair.glacage.usecases.lumberjack.chop;
 import com.milkeclair.glacage.actions.search.breadthFirst.BreadthFirst;
 import com.milkeclair.glacage.actions.search.breadthFirst.Node;
 import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
-import com.milkeclair.glacage.models.Leaf;
+import com.milkeclair.glacage.models.block.leaf.Leaf;
 import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,17 +29,14 @@ public class LeafCollection {
 
   /** 葉を探索する。 原木の位置からBFSで探索していき、収集した葉を返す。 */
   public LinkedHashSet<BlockPos> call() {
-    var nodes =
-        new BreadthFirst<>(
-                starts(),
-                this::isInsideSearchArea,
-                this::isCollectableLeaf,
-                this::neighbors,
-                MAX_LEAF_BLOCKS,
-                OverflowPolicy.ELLIPSIS)
-            .collect();
-
-    return positions(nodes);
+    return new BreadthFirst<>(
+            starts(),
+            this::isInsideSearchArea,
+            this::isCollectableLeaf,
+            this::neighbors,
+            MAX_LEAF_BLOCKS,
+            OverflowPolicy.ELLIPSIS)
+        .collectValues();
   }
 
   private ArrayList<Node<BlockPos>> starts() {
@@ -75,15 +71,5 @@ public class LeafCollection {
     var leaf = new Leaf(level.getBlockState(node.value()));
 
     return leaf.isNatural() && !leaf.isTooFarFromLog(node.distance());
-  }
-
-  private LinkedHashSet<BlockPos> positions(Collection<Node<BlockPos>> nodes) {
-    var positions = new LinkedHashSet<BlockPos>();
-
-    for (var node : nodes) {
-      positions.add(node.value());
-    }
-
-    return positions;
   }
 }

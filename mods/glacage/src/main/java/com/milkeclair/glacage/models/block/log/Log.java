@@ -1,4 +1,4 @@
-package com.milkeclair.glacage.models;
+package com.milkeclair.glacage.models.block.log;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;

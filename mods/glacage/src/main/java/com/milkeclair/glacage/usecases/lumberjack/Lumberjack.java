@@ -1,9 +1,8 @@
 package com.milkeclair.glacage.usecases.lumberjack;
 
-import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
+import com.milkeclair.glacage.actions.delayedBreak.Runner;
 import com.milkeclair.glacage.config.feature.Feature;
 import com.milkeclair.glacage.usecases.lumberjack.chop.Chop;
-import java.util.ArrayDeque;
 import net.minecraft.core.BlockPos;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,8 +17,7 @@ public class Lumberjack {
   /** 木と認める範囲。 */
   public static final int MAX_HORIZONTAL_RADIUS = 8;
 
-  private boolean isBreakingTree = false;
-  private final ArrayDeque<DelayedBreak> delayedTreeBreaks = new ArrayDeque<>();
+  private final Runner breaks = new Runner(Feature.LUMBERJACK.CHOP);
 
   /** 同じ木として探索する範囲に入っているかどうかの判定。 */
   public static boolean isInsideSearchArea(BlockPos brokeLogPos, BlockPos pos) {
@@ -36,48 +34,12 @@ public class Lumberjack {
   /** 木をこるアクション。 */
   @SubscribeEvent(priority = EventPriority.LOWEST)
   public void chop(BlockEvent.BreakEvent event) {
-    if (!Feature.enabled(Feature.LUMBERJACK.CHOP, event.getPlayer())) {
-      return;
-    }
-
-    if (isBreakingTree) {
-      return;
-    }
-
-    isBreakingTree = true;
-    try {
-      new Chop(event).call().ifPresent(delayedTreeBreaks::add);
-    } finally {
-      isBreakingTree = false;
-    }
+    breaks.enqueue(event.getPlayer(), () -> new Chop(event).call());
   }
 
   /* キューの処理。 */
   @SubscribeEvent
   public void breakQueuedBlocks(ServerTickEvent.Post event) {
-    if (!Feature.enabled(Feature.LUMBERJACK.CHOP)) {
-      delayedTreeBreaks.clear();
-      return;
-    }
-
-    if (isBreakingTree || delayedTreeBreaks.isEmpty()) {
-      return;
-    }
-
-    isBreakingTree = true;
-    try {
-      var current = delayedTreeBreaks.peek();
-      if (!Feature.enabled(Feature.LUMBERJACK.CHOP, current.player())) {
-        delayedTreeBreaks.removeFirst();
-        return;
-      }
-
-      current.tick();
-      if (current.isFinished()) {
-        delayedTreeBreaks.removeFirst();
-      }
-    } finally {
-      isBreakingTree = false;
-    }
+    breaks.tick();
   }
 }

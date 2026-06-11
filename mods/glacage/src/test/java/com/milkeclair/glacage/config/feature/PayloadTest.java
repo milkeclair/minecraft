@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import io.netty.buffer.Unpooled;
@@ -31,7 +31,7 @@ class PayloadTest {
   void reset() {
     PlayerPreference.clear();
     for (var flag : Flag.values()) {
-      Config.setEnabled(flag, flag.defaultEnabled());
+      ClientConfig.setEnabled(flag, flag.defaultEnabled());
     }
   }
 
@@ -102,7 +102,7 @@ class PayloadTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
         when(context.player()).thenReturn(contextPlayer);
 
         Payload.handle(new Payload(Feature.LUMBERJACK.CHOP, false), context);

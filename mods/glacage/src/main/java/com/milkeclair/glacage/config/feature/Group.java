@@ -6,7 +6,10 @@ public enum Group {
   LUMBERJACK("lumberjack"),
 
   /* グルメ機能。 */
-  FOODIE("foodie");
+  FOODIE("foodie"),
+
+  /* 採掘機能。 */
+  MINER("miner");
 
   private final String key;
 

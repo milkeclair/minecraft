@@ -1,5 +1,6 @@
 package com.milkeclair.glacage.config.feature;
 
+import com.milkeclair.glacage.config.ServerConfig;
 import java.util.HashMap;
 import net.minecraft.world.entity.player.Player;
 
@@ -9,6 +10,8 @@ public class Feature {
   public static final Lumberjack LUMBERJACK = new Lumberjack();
   /* グルメ機能。 */
   public static final Foodie FOODIE = new Foodie();
+  /* 採掘機能。 */
+  public static final Miner MINER = new Miner();
 
   private static final HashMap<Flag, Mode> OVERRIDES = new HashMap<>();
 
@@ -41,7 +44,7 @@ public class Feature {
 
   /* 有効かどうかの判定。 */
   public static boolean enabled(Flag flag, Player player) {
-    // 最優先は親カテゴリの設定。例えば、Lumberjackが無効ならchopは無効になる。
+    // 親カテゴリが無効なら子設定も無効になる。
     if (flag.parent().isPresent() && !enabled(flag.parent().get(), player)) {
       return false;
     }
@@ -49,7 +52,14 @@ public class Feature {
     return switch (override(flag)) {
       case ENABLED -> true;
       case DISABLED -> false;
-      case USER -> PlayerPreference.enabled(flag, player);
+      case USER -> configured(flag, player);
+    };
+  }
+
+  private static boolean configured(Flag flag, Player player) {
+    return switch (ServerConfig.priority()) {
+      case CLIENT -> PlayerPreference.enabled(flag, player);
+      case SERVER -> ServerConfig.enabled(flag);
     };
   }
 

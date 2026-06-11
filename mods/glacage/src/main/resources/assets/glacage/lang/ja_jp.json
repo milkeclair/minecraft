@@ -2,8 +2,12 @@
   "glacage.configuration.title": "設定",
   "glacage.configuration.section.glacage.client.toml": "クライアント設定",
   "glacage.configuration.section.glacage.client.toml.title": "Glacageの設定",
+  "glacage.configuration.section.glacage.server.toml": "サーバー設定",
+  "glacage.configuration.section.glacage.server.toml.title": "Glacageのサーバー設定",
   "glacage.configuration.features": "機能",
   "glacage.configuration.features.button": "編集",
+  "glacage.configuration.features.priority": "優先設定",
+  "glacage.configuration.features.priority.tooltip": "クライアント設定とサーバー設定のどちらを優先するか。",
   "glacage.configuration.features.foodie": "グルメ",
   "glacage.configuration.features.foodie.tooltip": "食事関連",
   "glacage.configuration.features.foodie.enabled": "有効",
@@ -15,5 +19,11 @@
   "glacage.configuration.features.lumberjack.chop": "伐採",
   "glacage.configuration.features.lumberjack.chop.tooltip": "原木を壊したときに木全体を壊します。",
   "glacage.configuration.features.lumberjack.enabled": "有効",
-  "glacage.configuration.features.lumberjack.enabled.tooltip": "木こり機能を有効にします。"
+  "glacage.configuration.features.lumberjack.enabled.tooltip": "木こり機能を有効にします。",
+  "glacage.configuration.features.miner": "炭鉱夫",
+  "glacage.configuration.features.miner.tooltip": "採掘関連",
+  "glacage.configuration.features.miner.enabled": "有効",
+  "glacage.configuration.features.miner.enabled.tooltip": "採掘機能を有効にします。",
+  "glacage.configuration.features.miner.obstructive_block_break": "採掘阻害ブロックの破壊",
+  "glacage.configuration.features.miner.obstructive_block_break.tooltip": "地下で採掘を阻害するブロックを一括で壊します。"
 }

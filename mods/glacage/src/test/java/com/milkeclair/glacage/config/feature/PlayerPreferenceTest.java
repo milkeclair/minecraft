@@ -2,7 +2,7 @@ package com.milkeclair.glacage.config.feature;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.milkeclair.glacage.config.Config;
+import com.milkeclair.glacage.config.ClientConfig;
 import com.milkeclair.glacage.helpers.FakeConfig;
 import com.milkeclair.glacage.helpers.FakePlayer;
 import java.util.UUID;
@@ -23,7 +23,7 @@ class PlayerPreferenceTest {
   void reset() {
     PlayerPreference.clear();
     for (var flag : Flag.values()) {
-      Config.setEnabled(flag, flag.defaultEnabled());
+      ClientConfig.setEnabled(flag, flag.defaultEnabled());
     }
   }
 
@@ -39,11 +39,11 @@ class PlayerPreferenceTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK, false);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, false);
 
         assertThat(PlayerPreference.enabled(Feature.LUMBERJACK, player.serverPlayer())).isFalse();
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
 
         assertThat(PlayerPreference.enabled(Feature.LUMBERJACK, player.serverPlayer())).isTrue();
       }
@@ -54,12 +54,12 @@ class PlayerPreferenceTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, false);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, false);
 
         assertThat(PlayerPreference.enabled(Feature.LUMBERJACK.CHOP, player.serverPlayer()))
             .isFalse();
 
-        Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
 
         assertThat(PlayerPreference.enabled(Feature.LUMBERJACK.CHOP, player.serverPlayer()))
             .isTrue();
@@ -100,7 +100,7 @@ class PlayerPreferenceTest {
         var otherPlayer =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000002"));
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
         PlayerPreference.setEnabled(Feature.LUMBERJACK, disabledPlayer.serverPlayer(), false);
 
         assertThat(PlayerPreference.enabled(Feature.LUMBERJACK, disabledPlayer.serverPlayer()))
@@ -120,7 +120,7 @@ class PlayerPreferenceTest {
       var player =
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-      Config.setEnabled(Feature.LUMBERJACK, true);
+      ClientConfig.setEnabled(Feature.LUMBERJACK, true);
 
       PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
 
@@ -133,7 +133,7 @@ class PlayerPreferenceTest {
       var player =
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-      Config.setEnabled(Feature.LUMBERJACK.CHOP, true);
+      ClientConfig.setEnabled(Feature.LUMBERJACK.CHOP, true);
 
       PlayerPreference.setEnabled(Feature.LUMBERJACK.CHOP, player.serverPlayer(), false);
 
@@ -147,7 +147,7 @@ class PlayerPreferenceTest {
       var player =
           new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-      Config.setEnabled(Feature.LUMBERJACK, false);
+      ClientConfig.setEnabled(Feature.LUMBERJACK, false);
 
       PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), true);
 
@@ -167,7 +167,7 @@ class PlayerPreferenceTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
         PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
         PlayerPreference.remove(player.serverPlayer());
 
@@ -188,7 +188,7 @@ class PlayerPreferenceTest {
         var player =
             new FakePlayer().setUuid(UUID.fromString("00000000-0000-0000-0000-000000000001"));
 
-        Config.setEnabled(Feature.LUMBERJACK, true);
+        ClientConfig.setEnabled(Feature.LUMBERJACK, true);
         PlayerPreference.setEnabled(Feature.LUMBERJACK, player.serverPlayer(), false);
         PlayerPreference.clear();
 

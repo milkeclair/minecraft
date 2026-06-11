@@ -191,6 +191,62 @@ class BreadthFirstTest {
   }
 
   @Nested
+  @DisplayName("#collectValues")
+  class CollectValues {
+    @Nested
+    @DisplayName("辿れるノードがある場合")
+    class ReachableNodes {
+      @Test
+      @DisplayName("ノードの値を幅優先順に返す")
+      void returnsValuesInBreadthFirstOrder() {
+        var search =
+            new BreadthFirst<>(
+                List.of(new Node<>("A")),
+                node -> true,
+                node -> true,
+                node ->
+                    switch (node.value()) {
+                      case "A" -> List.of("B", "C");
+                      case "B" -> List.of("D");
+                      default -> List.of();
+                    },
+                10,
+                OverflowPolicy.ELLIPSIS);
+
+        var values = search.collectValues();
+
+        assertThat(values).containsExactly("A", "B", "C", "D");
+      }
+    }
+
+    @Nested
+    @DisplayName("overflowPolicyがEMPTYの場合")
+    class Empty {
+      @Test
+      @DisplayName("空のSetを返す")
+      void returnsEmptySet() {
+        var search =
+            new BreadthFirst<>(
+                List.of(new Node<>("A")),
+                node -> true,
+                node -> true,
+                node ->
+                    switch (node.value()) {
+                      case "A" -> List.of("B");
+                      case "B" -> List.of("C");
+                      default -> List.of();
+                    },
+                2,
+                OverflowPolicy.EMPTY);
+
+        var values = search.collectValues();
+
+        assertThat(values).isEmpty();
+      }
+    }
+  }
+
+  @Nested
   @DisplayName("#routeTo")
   class RouteTo {
     @Nested
