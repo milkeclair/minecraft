@@ -14,10 +14,6 @@ public class Mobility {
   @SubscribeEvent
   public void fastClimb(PlayerTickEvent.Post event) {
     var player = event.getEntity();
-    if (player.level().isClientSide()) {
-      return;
-    }
-
     fastClimbRunner.call(player, () -> new FastClimb(player).call());
   }
 }

@@ -97,8 +97,8 @@ class MobilityTest {
     @DisplayName("クライアント側tickの場合")
     class ClientSideTick {
       @Test
-      @DisplayName("FastClimbを作成しない")
-      void doesNotConstructFastClimb() {
+      @DisplayName("FastClimbを作成して実行する")
+      void constructsAndCallsFastClimb() {
         var level = mock(Level.class);
         var player = mock(Player.class);
         var event = new PlayerTickEvent.Post(player);
@@ -110,7 +110,8 @@ class MobilityTest {
         try (var mockedFastClimbs = mockConstruction(FastClimb.class)) {
           mobility.fastClimb(event);
 
-          assertThat(mockedFastClimbs.constructed()).isEmpty();
+          assertThat(mockedFastClimbs.constructed()).hasSize(1);
+          verify(mockedFastClimbs.constructed().getFirst()).call();
         }
       }
     }
