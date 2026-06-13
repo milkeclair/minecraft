@@ -1,9 +1,9 @@
 package com.milkeclair.glacage.usecases.miner.obstructiveBlockBreak;
 
 import com.milkeclair.glacage.actions.blockBreak.BlockBreak;
-import com.milkeclair.glacage.models.block.Obstructive;
-import com.milkeclair.glacage.models.block.SolidBlock;
 import com.milkeclair.glacage.models.ground.Ground;
+import com.milkeclair.glacage.models.solidBlock.Obstructive;
+import com.milkeclair.glacage.models.solidBlock.SolidBlock;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.level.BlockEvent;
 

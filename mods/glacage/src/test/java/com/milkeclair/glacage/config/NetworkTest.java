@@ -20,7 +20,7 @@ class NetworkTest {
   @DisplayName(".register")
   class Register {
     @Test
-    @DisplayName("機能設定同期payloadをserver-boundで登録する")
+    @DisplayName("server-bound payloadを登録する")
     void registersPayload() {
       var event = mock(RegisterPayloadHandlersEvent.class);
       var registrar = mock(PayloadRegistrar.class);
@@ -28,10 +28,20 @@ class NetworkTest {
       when(event.registrar(Glacage.MOD_ID)).thenReturn(registrar);
       when(registrar.playToServer(eq(Payload.TYPE), eq(Payload.CODEC), any()))
           .thenReturn(registrar);
+      when(registrar.playToServer(
+              eq(com.milkeclair.glacage.usecases.parkour.doubleJump.Request.TYPE),
+              eq(com.milkeclair.glacage.usecases.parkour.doubleJump.Request.CODEC),
+              any()))
+          .thenReturn(registrar);
 
       Network.register(event);
 
       verify(registrar).playToServer(eq(Payload.TYPE), eq(Payload.CODEC), any());
+      verify(registrar)
+          .playToServer(
+              eq(com.milkeclair.glacage.usecases.parkour.doubleJump.Request.TYPE),
+              eq(com.milkeclair.glacage.usecases.parkour.doubleJump.Request.CODEC),
+              any());
     }
   }
 }

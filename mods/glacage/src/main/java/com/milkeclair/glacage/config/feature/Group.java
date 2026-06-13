@@ -11,8 +11,8 @@ public enum Group {
   /* 採掘機能。 */
   MINER("miner"),
 
-  /* 移動機能。 */
-  MOBILITY("mobility");
+  /* パルクール機能。 */
+  PARKOUR("parkour");
 
   private final String key;
 

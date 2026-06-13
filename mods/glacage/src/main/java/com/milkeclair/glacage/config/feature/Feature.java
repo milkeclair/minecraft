@@ -12,8 +12,8 @@ public class Feature {
   public static final Foodie FOODIE = new Foodie();
   /* 採掘機能。 */
   public static final Miner MINER = new Miner();
-  /* 移動機能。 */
-  public static final Mobility MOBILITY = new Mobility();
+  /* パルクール機能。 */
+  public static final Parkour PARKOUR = new Parkour();
 
   private static final HashMap<Flag, Mode> OVERRIDES = new HashMap<>();
 

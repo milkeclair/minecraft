@@ -8,6 +8,12 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 public class Network {
   /* eventにplayToServerで設定の同期を登録する。 */
   public static void register(RegisterPayloadHandlersEvent event) {
-    event.registrar(Glacage.MOD_ID).playToServer(Payload.TYPE, Payload.CODEC, Payload::handle);
+    var registrar = event.registrar(Glacage.MOD_ID);
+
+    registrar.playToServer(Payload.TYPE, Payload.CODEC, Payload::handle);
+    registrar.playToServer(
+        com.milkeclair.glacage.usecases.parkour.doubleJump.Request.TYPE,
+        com.milkeclair.glacage.usecases.parkour.doubleJump.Request.CODEC,
+        com.milkeclair.glacage.usecases.parkour.doubleJump.Request::handle);
   }
 }

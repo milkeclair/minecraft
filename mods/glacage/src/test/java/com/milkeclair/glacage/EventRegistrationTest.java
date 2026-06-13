@@ -5,7 +5,8 @@ import static org.mockito.Mockito.mockConstruction;
 
 import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import com.milkeclair.glacage.usecases.miner.Miner;
-import com.milkeclair.glacage.usecases.mobility.Mobility;
+import com.milkeclair.glacage.usecases.parkour.Parkour;
+import com.milkeclair.glacage.usecases.parkour.doubleJump.Server;
 import net.neoforged.neoforge.common.NeoForge;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,15 +25,18 @@ class EventRegistrationTest {
       void registersEventHandlers() {
         try (var lumberjacks = mockConstruction(Lumberjack.class);
             var miners = mockConstruction(Miner.class);
-            var mobilities = mockConstruction(Mobility.class)) {
+            var parkours = mockConstruction(Parkour.class);
+            var servers = mockConstruction(Server.class)) {
           new EventRegistration().call();
 
           assertThat(lumberjacks.constructed()).hasSize(1);
           assertThat(miners.constructed()).hasSize(1);
-          assertThat(mobilities.constructed()).hasSize(1);
+          assertThat(parkours.constructed()).hasSize(1);
+          assertThat(servers.constructed()).hasSize(1);
           NeoForge.EVENT_BUS.unregister(lumberjacks.constructed().getFirst());
           NeoForge.EVENT_BUS.unregister(miners.constructed().getFirst());
-          NeoForge.EVENT_BUS.unregister(mobilities.constructed().getFirst());
+          NeoForge.EVENT_BUS.unregister(parkours.constructed().getFirst());
+          NeoForge.EVENT_BUS.unregister(servers.constructed().getFirst());
         }
       }
     }

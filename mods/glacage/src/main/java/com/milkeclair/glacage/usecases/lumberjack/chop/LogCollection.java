@@ -3,7 +3,7 @@ package com.milkeclair.glacage.usecases.lumberjack.chop;
 import com.milkeclair.glacage.actions.search.breadthFirst.BreadthFirst;
 import com.milkeclair.glacage.actions.search.breadthFirst.Node;
 import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
-import com.milkeclair.glacage.models.block.SolidBlock;
+import com.milkeclair.glacage.models.solidBlock.SolidBlock;
 import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -56,6 +56,6 @@ public class LogCollection {
   private boolean isCollectableLog(Node<BlockPos> node) {
     var block = new SolidBlock(level.getBlockState(node.value()));
 
-    return block.isLog() && block.isSameAs(baseBlock);
+    return block.log().matches(baseBlock);
   }
 }

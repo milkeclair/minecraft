@@ -3,7 +3,7 @@ package com.milkeclair.glacage.usecases.lumberjack.chop;
 import com.milkeclair.glacage.actions.search.breadthFirst.BreadthFirst;
 import com.milkeclair.glacage.actions.search.breadthFirst.Node;
 import com.milkeclair.glacage.actions.search.breadthFirst.OverflowPolicy;
-import com.milkeclair.glacage.models.block.leaf.Leaf;
+import com.milkeclair.glacage.models.solidBlock.SolidBlock;
 import com.milkeclair.glacage.usecases.lumberjack.Lumberjack;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -68,7 +68,7 @@ public class LeafCollection {
   }
 
   private boolean isCollectableLeaf(Node<BlockPos> node) {
-    var leaf = new Leaf(level.getBlockState(node.value()));
+    var leaf = new SolidBlock(level.getBlockState(node.value())).leaf();
 
     return leaf.isNatural() && !leaf.isTooFarFromLog(node.distance());
   }

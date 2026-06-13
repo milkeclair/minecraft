@@ -1,6 +1,6 @@
 package com.milkeclair.glacage.models.ground;
 
-import com.milkeclair.glacage.models.block.SolidBlock;
+import com.milkeclair.glacage.models.solidBlock.SolidBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.Heightmap;

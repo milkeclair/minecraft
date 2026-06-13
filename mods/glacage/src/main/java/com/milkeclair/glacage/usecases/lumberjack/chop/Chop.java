@@ -1,7 +1,7 @@
 package com.milkeclair.glacage.usecases.lumberjack.chop;
 
 import com.milkeclair.glacage.actions.delayedBreak.DelayedBreak;
-import com.milkeclair.glacage.models.block.SolidBlock;
+import com.milkeclair.glacage.models.solidBlock.SolidBlock;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;

@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.verify;
 
 import com.milkeclair.glacage.config.ClientConfig;
@@ -51,7 +52,9 @@ class ClientTest {
       var modEventBus = mock(IEventBus.class);
       var container = mock(ModContainer.class);
 
-      new Client(modEventBus, container);
+      try (var registrations = mockConstruction(ClientEventRegistration.class)) {
+        new Client(modEventBus, container);
+      }
 
       verify(container)
           .registerExtensionPoint(eq(IConfigScreenFactory.class), any(IConfigScreenFactory.class));
@@ -63,9 +66,24 @@ class ClientTest {
       var modEventBus = mock(IEventBus.class);
       var container = mock(ModContainer.class);
 
-      new Client(modEventBus, container);
+      try (var registrations = mockConstruction(ClientEventRegistration.class)) {
+        new Client(modEventBus, container);
+      }
 
       verify(modEventBus).register(isA(Foodie.class));
+    }
+
+    @Test
+    @DisplayName("client event handlerを登録する")
+    void registersClientEvents() {
+      var modEventBus = mock(IEventBus.class);
+      var container = mock(ModContainer.class);
+
+      try (var registrations = mockConstruction(ClientEventRegistration.class)) {
+        new Client(modEventBus, container);
+
+        verify(registrations.constructed().getFirst()).call();
+      }
     }
 
     @Nested
@@ -77,7 +95,9 @@ class ClientTest {
         var modEventBus = mock(IEventBus.class);
         var container = mock(ModContainer.class);
 
-        new Client(modEventBus, container);
+        try (var registrations = mockConstruction(ClientEventRegistration.class)) {
+          new Client(modEventBus, container);
+        }
 
         assertThatCode(() -> ClientConfig.sync(Feature.LUMBERJACK)).doesNotThrowAnyException();
       }

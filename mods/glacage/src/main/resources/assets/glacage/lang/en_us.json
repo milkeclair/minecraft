@@ -26,10 +26,12 @@
   "glacage.configuration.features.miner.enabled.tooltip": "Enable Miner features.",
   "glacage.configuration.features.miner.obstructive_block_break": "Obstructive Block Break",
   "glacage.configuration.features.miner.obstructive_block_break.tooltip": "Break connected blocks that obstruct mining while underground.",
-  "glacage.configuration.features.mobility": "Mobility",
-  "glacage.configuration.features.mobility.tooltip": "Mobility related",
-  "glacage.configuration.features.mobility.enabled": "Enabled",
-  "glacage.configuration.features.mobility.enabled.tooltip": "Enable Mobility features.",
-  "glacage.configuration.features.mobility.fast_climb": "Fast Climb",
-  "glacage.configuration.features.mobility.fast_climb.tooltip": "Climb faster on climbable blocks."
+  "glacage.configuration.features.parkour": "Parkour",
+  "glacage.configuration.features.parkour.tooltip": "Parkour related",
+  "glacage.configuration.features.parkour.enabled": "Enabled",
+  "glacage.configuration.features.parkour.enabled.tooltip": "Enable Parkour features.",
+  "glacage.configuration.features.parkour.double_jump": "Double Jump",
+  "glacage.configuration.features.parkour.double_jump.tooltip": "Jump again while airborne.",
+  "glacage.configuration.features.parkour.fast_climb": "Fast Climb",
+  "glacage.configuration.features.parkour.fast_climb.tooltip": "Climb faster on climbable blocks."
 }

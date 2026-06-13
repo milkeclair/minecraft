@@ -21,6 +21,7 @@ public class Client {
   public Client(IEventBus modEventBus, ModContainer container) {
     ClientConfig.setSyncer(Client::syncFlag);
     modEventBus.register(new Foodie());
+    new ClientEventRegistration().call();
     NeoForge.EVENT_BUS.addListener(Client::syncFlagsOnLogin);
 
     container.registerExtensionPoint(

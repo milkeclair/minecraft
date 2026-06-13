@@ -1,11 +1,11 @@
 package com.milkeclair.glacage.usecases.foodie.saturation;
 
-import com.milkeclair.glacage.models.satiety.Bar;
-import com.milkeclair.glacage.models.satiety.Satiety;
-import com.milkeclair.glacage.models.satiety.Visibility;
+import com.milkeclair.glacage.models.livingPlayer.LivingPlayer;
+import com.milkeclair.glacage.models.livingPlayer.satiety.Bar;
+import com.milkeclair.glacage.models.livingPlayer.satiety.Satiety;
+import com.milkeclair.glacage.models.livingPlayer.satiety.Visibility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 /* Minecraftから隠し満腹度表示に必要な状態を取り出す。 */
@@ -27,12 +27,7 @@ public class SaturationState implements State {
   /* 満腹度の状態。 */
   @Override
   public Satiety satiety() {
-    var foodData = minecraft.player.getFoodData();
-
-    return new Satiety(
-        foodData.getFoodLevel(),
-        foodData.getSaturationLevel(),
-        minecraft.player.hasEffect(MobEffects.HUNGER));
+    return new LivingPlayer(minecraft.player).satiety();
   }
 
   /* 満腹度のバー。 */

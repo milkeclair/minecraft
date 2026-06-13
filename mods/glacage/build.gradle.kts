@@ -106,6 +106,10 @@ tasks.named<Test>("test") {
   useJUnitPlatform()
 }
 
+tasks.withType<JavaCompile>().configureEach {
+  options.compilerArgs.add("-Xlint:deprecation")
+}
+
 tasks.register("verifyAll") {
   group = "verification"
   description = "Runs formatting checks and builds both Gradle build logic and this mod."

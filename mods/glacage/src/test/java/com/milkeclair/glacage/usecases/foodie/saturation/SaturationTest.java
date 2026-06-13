@@ -5,8 +5,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import com.milkeclair.glacage.models.satiety.Bar;
-import com.milkeclair.glacage.models.satiety.Satiety;
+import com.milkeclair.glacage.models.livingPlayer.satiety.Bar;
+import com.milkeclair.glacage.models.livingPlayer.satiety.Satiety;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
